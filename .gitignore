@@ -1,0 +1,11 @@
+dist/
+node_modules/
+testing/
+
+.idea
+.vs
+
+npm-error.log
+
+*.sublime-workspace
+*.sublime-project
