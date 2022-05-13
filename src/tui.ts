@@ -1,7 +1,8 @@
 import { log } from 'console'
 import { red, green } from 'colorette'
 import { prompt } from 'inquirer' 
-import { viewHist, clearHist } from './cmds/History'
+import { viewHist, clearHist, histSize } from './cmds/History'
+import { historyClearConfirmation as hCC } from './utils/prompts' 
 
 const tui = async () => {
 	while (true) {
@@ -22,12 +23,14 @@ const tui = async () => {
 		if (cmd == 'exit') {
 			process.exit()
 		} else if (cmd == 'viewhist') {
-			viewHist()
+			log(await viewHist())
 		} else if (cmd == 'clearhist') {
-			await clearHist()
-			log(green("History cleared successfully."))
-		} else {
-			log(red(""))
+			clearHist(true)
+		} else if (cmd == 'histsize') {
+			log(await histSize())
+		}
+		else {
+			log(red(`Command ${cmd} doesn't exist.`))
 		}
 	}
 }

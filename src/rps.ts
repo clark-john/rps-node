@@ -10,7 +10,7 @@ import moment from 'moment'
 let user_score: number = 0
 let comp_score: number = 0
 let tie: number = 0
-const total_games: number = user_score + comp_score + tie
+
 const datePlayed = moment(Date.now()).format('LLL')
 
 const config = getIniData()
@@ -23,13 +23,15 @@ let paper_c: number = 0
 let scissors_c: number = 0*/
 
 const play = async () => {
-  let compname: string = await prompt([
-    {
-      'type': 'input',
-      'name': 'compname',
-      'message': "Enter the name of your player, or type \"none\" to skip.\nType \"random\" to generate.\nType \"cancel\" or \"exit\" to terminate this program.\n"
-    }
-  ]).then(ans=>{
+  let compname: string = await prompt(
+      [
+        {
+          'type': 'input',
+          'name': 'compname',
+          'message': "Enter the name of your player, or type \"none\" to skip.\nType \"random\" to generate.\nType \"cancel\" or \"exit\" to terminate this program.\n"
+        }
+      ]
+    ).then(ans=>{
     ans = ans.compname
     if (ans == '' || ans.toLowerCase() == 'none'){
       ans = "Computer"
@@ -51,11 +53,15 @@ const play = async () => {
     else if ( computer_action == 2){ computer_action = 'scissors'}
     else { computer_action = 'paper' }
 
-    let user_action = await prompt([{
-      'type': 'input',
-      'name': 'action',
-      'message': "Enter a choice: (rock, paper, scissors)\nNote: This is not case sensitive, but don't shortcut any of these words."
-    }]).then(ans => {
+    let user_action = await prompt(
+      [
+        {
+          'type': 'input',
+          'name': 'action',
+          'message': "Enter a choice: (rock, paper, scissors)\nNote: This is not case sensitive, but don't shortcut any of these words."
+        }
+      ]
+    ).then(ans => {
       let user_act = ans.action 
       return user_act
     }).catch(err => {error(err)})
@@ -100,11 +106,12 @@ const play = async () => {
         user_score += 1
       }
     } else if (user_action == 'end'){
+      let total_games: number = user_score + comp_score + tie
       log("the game ends")
       log("You:",user_score)
       log(compname+":",comp_score)
       log("Tie:",tie)
-      console.log(config.Database.store_history)
+      log("Number of games:",total_games)
       await storeHist(user_score, comp_score, tie, total_games, datePlayed)
       process.exit()
     } else {
