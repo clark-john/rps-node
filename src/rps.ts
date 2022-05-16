@@ -11,7 +11,9 @@ let user_score: number = 0
 let comp_score: number = 0
 let tie: number = 0
 
-const datePlayed = moment(Date.now()).format('LLL')
+const date = moment(Date.now()).format('LL')
+const time = moment(Date.now()).format('LTS')
+const datePlayed = `${date} ${time}`
 
 const config = getIniData()
 

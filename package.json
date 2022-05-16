@@ -22,7 +22,8 @@
     "ini": "^3.0.0",
     "inquirer": "^8.2.4",
     "moment": "^2.29.3",
-    "random": "^3.0.6"
+    "random": "^3.0.6",
+    "slugify": "^1.6.5"
   },
   "devDependencies": {
     "@prisma/client": "^3.14.0",

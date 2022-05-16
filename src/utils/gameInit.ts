@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import { log } from 'console'
 import { clearHist } from '../cmds/History'
 import { getIniData } from './getIniData'
 
@@ -9,10 +8,10 @@ const maxhistsize = config.Database.max_histsize
 
 const gameInit = async () => {
 	let histsize = await prisma.history.findMany()
-	log(histsize.length)
 	if (histsize.length == maxhistsize){
 		clearHist(false)
-	} 
+	}
+	// console.log() 
 }
 
 export { gameInit }

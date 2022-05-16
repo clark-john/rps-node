@@ -11,8 +11,6 @@ const storeHist = async (user_score, comp_score, tie, total_games, datePlayed) =
       total_games: total_games,
       dateplayed: datePlayed
     }
-  }).catch(err => {
-    throw err
   }).finally(async () => {
     await prisma.$disconnect
   })

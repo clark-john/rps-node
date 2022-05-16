@@ -1,0 +1,8 @@
+[
+	{ "command": "viewhist", "usage": "View the history" },
+	{ "command": "clearhist", "usage": "Clear the history" },
+	{ "command": "slugify", "usage": "Slugify a string" },
+	{ "command": "list", "usage": "Lists all the commands provided by the tui." },
+	{ "command": "exit", "usage": "Exit tui" },
+	{ "command": "cls, clear", "usage": "Clears the console" }
+]
