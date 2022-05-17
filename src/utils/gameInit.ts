@@ -11,7 +11,6 @@ const gameInit = async () => {
 	if (histsize.length == maxhistsize){
 		clearHist(false)
 	}
-	// console.log() 
 }
 
 export { gameInit }

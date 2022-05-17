@@ -1,5 +1,4 @@
-import { PrismaClient, History } from '@prisma/client'
-import { log } from 'console'
+import { PrismaClient } from '@prisma/client'
 import { autoIncrement } from './autoIncrement'
 
 const prisma = new PrismaClient()

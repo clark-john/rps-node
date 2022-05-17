@@ -9,3 +9,5 @@ npm-error.log
 
 *.sublime-workspace
 *.sublime-project
+
+prisma/migrations

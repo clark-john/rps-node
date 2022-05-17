@@ -1,7 +1,7 @@
 import { log, error } from 'console'
 import { red, yellow, bold, green } from 'colorette'
 import { prompt } from 'inquirer'
-import { getIniData } from './utils/getIniData'
+// import { getIniData } from './utils/getIniData'
 import { storeHist } from './utils/storeHistory'
 import random from 'random'
 import casual from 'casual'
@@ -15,7 +15,7 @@ const date = moment(Date.now()).format('LL')
 const time = moment(Date.now()).format('LTS')
 const datePlayed = `${date} ${time}`
 
-const config = getIniData()
+// const config = getIniData()
 
 /*let rock_user: number = 0
 let paper_user: number = 0

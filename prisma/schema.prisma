@@ -23,6 +23,7 @@ model History {
 
 model User {
   name String @db.VarChar(200) @unique
+  password String @db.VarChar(200)
   birthdate Int @db.SmallInt()
   birthmonth String @db.VarChar(10)
   birthyear Int
@@ -31,6 +32,6 @@ model User {
 }
 
 enum Gender {
-  male 
-  female
+  Male 
+  Female
 }

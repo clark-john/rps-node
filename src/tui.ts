@@ -1,12 +1,11 @@
 import { log } from 'console'
-import { red, green, bold, magenta } from 'colorette'
+import { red, bold, magenta } from 'colorette'
 import { prompt } from 'inquirer' 
 import { viewHist, clearHist, histSize } from './cmds/History'
 import { locateFile } from './utils/fileLocator'
 import { readFileSync } from 'fs'
 import slugify from 'slugify'
 import { 
-	historyClearConfirmation as hCC,
 	nameToSlugify 
 } from './utils/prompts' 
 

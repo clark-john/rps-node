@@ -1,9 +1,9 @@
 import { yellow, magenta, green, bold, red } from 'colorette'
 import { prompt } from 'inquirer'
 import { play } from './rps'
+import { tui } from './tui'
 import { gameInit } from './utils/gameInit'
 import { loginOrGuest } from './utils/Login'
-import { tui } from './tui'
 import { getIniData } from './utils/getIniData'
 import os from 'os'
 import repl from 'repl'
@@ -40,6 +40,7 @@ const main = async () => {
 			answer = answer.ans.toLowerCase()
 			return answer
 		}).catch(err=>{throw err})
+		
 		if (ans == 'y') {
 			await play()
 			break

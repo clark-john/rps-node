@@ -1,12 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-import { getIniData } from '../utils/getIniData' 
 import { log } from 'console'
 import { historyClearConfirmation as hCC } from '../utils/prompts'
 import { green } from 'colorette'
 
-const config = getIniData()
 const prisma = new PrismaClient()
-const maxhistsize = config.Database.max_histsize
 
 const clearHist = async (confirm_needed) => {
 	if (confirm_needed) {
