@@ -1,41 +1,56 @@
 import { red } from 'colorette'
 import { PrismaClient } from '@prisma/client'
+import sha1 from 'sha1' 
 import { 
 	userOrGuest, 
 	userPassword, 
 	registerNamePassword,
 	confirmPassword,
 	someDetails
-} from './prompts' 
+} from './prompts'
 
 const prisma = new PrismaClient()
 
 const loginOrGuest = async () => {
+	let data
 	let res = await userOrGuest()
 	if (res == 'Guest') {
-
-	} else if (res == 'User') {
+		data = "Guest"
+	}
+	else if (res == 'User') {
+		let userAndPassword
 		let fetchUsers = await prisma.user.findMany()
 		if (fetchUsers.length == 0) {
 			console.log("No users")
 		} else {
 			const usersArray = await prisma.user.findMany()
-			let userAndPassword = await userPassword()
+			userAndPassword = await userPassword()
 			
 			const usersList = []
 			for (let x = 0; x < usersArray.length; x++){
 				usersList.push(usersArray[x].name as never) 
 			}
 
-			const findme = usersList.find(item => item == userAndPassword.user)
+			const findme = usersList.includes(userAndPassword.user as never)
 
 			if ( !findme ){
-				console.log("User doesn't exist.")
+				process.exit(0)
 			} else {
-				console.log("User exists")
+				let pw = await prisma.user.findFirst({
+					where: {
+						name: userAndPassword.user
+					}
+				})
+				if (!pw) {}
+ 				else {
+					if (sha1(userAndPassword.password) == await pw.password) {
+					} else {
+						process.exit()
+					}
+				}
 			}
 		}
-
+		data = userAndPassword.user
 	} else {
 		let nameAndPass
 		while (true) {
@@ -44,6 +59,7 @@ const loginOrGuest = async () => {
 			if (nameAndPass.password != confirmPass) {
 				console.log(red("Passwords doesn't match."))
 			} else {
+				nameAndPass.password = sha1(nameAndPass.password)
 				break
 				return true
 			}
@@ -53,7 +69,7 @@ const loginOrGuest = async () => {
 			data: {
 				name: nameAndPass.name,
 				password: nameAndPass.password,
-				birthdate: details.birthdate,
+				birthdate: Number(details.birthdate),
 				birthmonth: details.birthmonth,
 				birthyear: details.birthyear,
 				gender: details.gender,
@@ -61,6 +77,7 @@ const loginOrGuest = async () => {
 			}
 		})
 	}
+	return data
 }
 
 export { loginOrGuest }

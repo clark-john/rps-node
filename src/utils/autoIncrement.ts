@@ -12,7 +12,6 @@ const autoIncrement = async () => {
 		last = lookForGameNumber[listLength].gamenumber
 		last++
 	}
-	
 	const number_return = last
 	return number_return
 }

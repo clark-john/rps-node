@@ -21,10 +21,15 @@ const config = getIniData()
 process.title = config.Game.window_title
 
 const main = async () => {
-	await loginOrGuest()
+	let userLoggedIn = await loginOrGuest()
+	if (userLoggedIn == 'Guest') {
+		console.log(yellow("You're not logged in. To save your high score, please log in or create a new account."))
+	} else {
+		console.log(green(bold(`You're logged in as ${userLoggedIn}`)))
+	}
 	while (true) {
 		await gameInit()
-		console.log(bold(green("Welcome to rps-python!")))
+		console.log(green("Welcome to rps-python!"))
 		console.log(yellow(`You're using ${system} as of now.`))
 		console.log(yellow(bold(`You're using Node ${node_version}`)))
 		console.log("Wanna play? Type 'y' to start the game or type 'n' if you're exiting.")

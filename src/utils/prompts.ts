@@ -1,5 +1,5 @@
 import { prompt } from 'inquirer'
-import { NameValidation, PasswordValidation } from './validations'
+import { NameValidation, PasswordValidation, BirthDateValidation } from './validations'
 
 // Login related things
 const userOrGuest = () => {
@@ -147,9 +147,10 @@ const someDetails = async () => {
 				"loop": false
 			},
 			{
-				"type": "number",
+				"type": "string",
 				"name": "birthdate",
-				"message": "Birth date (1-31)"
+				"message": "Birth date (1-31)",
+				"validate": BirthDateValidation
 			},
 			{
 				"type": "number",
