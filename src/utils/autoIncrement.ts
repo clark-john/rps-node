@@ -1,23 +1,19 @@
-import { readFile, writeFile } from 'fs/promises'
-import { locateFile } from './fileLocator'
 import { PrismaClient } from '@prisma/client'
 
-const { parse, stringify } = JSON
-const jsonpath = './src/utils/increment.json'
 const prisma = new PrismaClient()
 
 const autoIncrement = async () => {
-	let lookForGameNumber = await prisma.history.findFirst()
-
-	const jsonfile = await readFile(locateFile(jsonpath), 'utf8')
-	const inc = parse(jsonfile)
-	if (lookForGameNumber == null) {
-		inc.increment = 1
+	let lookForGameNumber = await prisma.history.findMany()
+	let last
+	if (lookForGameNumber.length == 0){
+		last = 1
 	} else {
-		inc.increment++
+		let listLength = lookForGameNumber.length - 1
+		last = lookForGameNumber[listLength].gamenumber
+		last++
 	}
-	const number_return = inc.increment
-	await writeFile(locateFile(jsonpath), stringify(inc))
+	
+	const number_return = last
 	return number_return
 }
 

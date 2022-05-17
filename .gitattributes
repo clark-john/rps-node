@@ -1,7 +1,6 @@
 * eol=crlf
 
 # config files
-prisma/schema.prisma linguist-detectable=true
-prisma/schema.prisma linguist-language="Prisma"
+prisma/schema.prisma linguist-detectable=true linguist-language="Prisma"
 .env linguist-detectable=false
 jest.config.ts linguist-generated

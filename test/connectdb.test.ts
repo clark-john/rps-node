@@ -5,8 +5,8 @@ const prisma = new PrismaClient()
 
 const main = async () => {
 	try {
+		// simple db operation to test db activity
 		let db = await prisma.history.findMany()
-		// simple operation to test db activity
 		return true
 	} catch(err) {
 		throw err
