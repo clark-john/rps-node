@@ -8,12 +8,12 @@ generator client {
 // to switch db to postgres
 // replace provider with "postgresql"
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model History {
-  gamenumber Int @id @default(autoincrement())
+  gamenumber Int 
   wins Int
   loses Int
   tie Int

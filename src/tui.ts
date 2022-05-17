@@ -48,9 +48,9 @@ const tui = async () => {
 			console.clear()
 		}
 		else {
-			log(red(`Command ${cmd} doesn't exist.`))
+			log(red(`Command ${cmd} doesn't exist. Type "list" for a list of commands.`))
 		}
 	}
 }
 
-export default tui
+export { tui }

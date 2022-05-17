@@ -1,26 +1,12 @@
 import { prompt } from 'inquirer'
 
-const historyClearConfirmation = async () => {
-	let response = await prompt(
-		[
-			{
-				"type": "confirm",
-				"name": "confirmation",
-				"message": "Are you sure you want to clear the history?"
-			}
-		]
-	).then(res=>{
-		res = res.confirmation
-		return res
-	})
-	.catch(err=>{
-		throw err
-	})
-	return response
-}
+
+
+
+// Login related things
 
 const userOrGuest = () => {
-	let response = prompt(
+	let response: Promise<string> = prompt(
 		[
 			{
 				"type": "list",
@@ -42,14 +28,13 @@ const userOrGuest = () => {
 	return response
 }
 
-
 const user = () => {
-	let response = prompt(
+	let response: Promise<string> = prompt(
 		[
 			{
 				"type": "input",
 				"name": "user",
-				"message": ""
+				"message": "User:"
 			}
 		]
 	).then(res => {
@@ -62,12 +47,13 @@ const user = () => {
 }
 
 const password = () => {
-	let response = prompt(
+	let response: Promise<string> = prompt(
 		[
 			{
-				"type": "input",
+				"type": "password",
 				"name": "password",
-				"message": ""
+				"message": "Password:",
+				"mask": true
 			}
 		]
 	).then(res => {
@@ -78,6 +64,8 @@ const password = () => {
 	})
 	return response
 }
+
+// tui related
 
 const nameToSlugify = async () => {
 	let response = await prompt(
@@ -96,6 +84,28 @@ const nameToSlugify = async () => {
 	})
 	return response
 }
+
+const historyClearConfirmation = async () => {
+	let response = await prompt(
+		[
+			{
+				"type": "confirm",
+				"name": "confirmation",
+				"message": "Are you sure you want to clear the history?"
+			}
+		]
+	).then(res=>{
+		res = res.confirmation
+		return res
+	})
+	.catch(err=>{
+		throw err
+	})
+	return response
+}
+
+
+// exporting
 
 export { 
 	historyClearConfirmation,

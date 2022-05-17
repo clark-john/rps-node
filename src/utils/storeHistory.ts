@@ -1,10 +1,14 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, History } from '@prisma/client'
 import { log } from 'console'
+import { autoIncrement } from './autoIncrement'
+
+const prisma = new PrismaClient()
 
 const storeHist = async (user_score, comp_score, tie, total_games, datePlayed) => {
-  const prisma = new PrismaClient()
+  const gamenumber = await autoIncrement()
   await prisma.history.create({
     data: {
+      gamenumber: gamenumber,
       wins: user_score,
       loses: comp_score,
       tie: tie,

@@ -3,9 +3,10 @@ import { prompt } from 'inquirer'
 import { play } from './rps'
 import { gameInit } from './utils/gameInit'
 import { loginOrGuest } from './utils/Login'
+import { tui } from './tui'
+import { getIniData } from './utils/getIniData'
 import os from 'os'
 import repl from 'repl'
-import tui from './tui'
 
 let system = os.type()
 const node_version = process.version
@@ -15,10 +16,12 @@ if (system == 'Windows_NT'){
 	system = 'Mac OS'
 }
 
-process.title = "Rock Paper Scissors - Node"
+const config = getIniData()
 
-const question = async () => {
-	// loginOrGuest()
+process.title = config.Game.window_title
+
+const main = async () => {
+	await loginOrGuest()
 	while (true) {
 		await gameInit()
 		console.log(bold(green("Welcome to rps-python!")))
@@ -56,4 +59,4 @@ const question = async () => {
 		}
 	}
 }
-question()
+main()

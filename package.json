@@ -11,7 +11,10 @@
     "start": "node dist/src/index.js",
     "watch": "tsc -w",
     "lint": "eslint ./src --ignore-pattern .gitignore",
-    "migrate": "prisma migrate dev --name"
+    "migrate": "prisma migrate dev --name",
+    "studio": "cross-env BROWSER=none prisma studio",
+    "resetdb": "prisma migrate reset",
+    "test": "jest"
   },
   "dependencies": {
     "@eslint/create-config": "^0.2.0",
@@ -19,6 +22,7 @@
     "@types/inquirer": "^8.2.1",
     "casual": "^1.6.2",
     "colorette": "^2.0.16",
+    "cross-env": "^7.0.3",
     "ini": "^3.0.0",
     "inquirer": "^8.2.4",
     "moment": "^2.29.3",
@@ -31,8 +35,10 @@
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "eslint": "^8.15.0",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16",
     "prisma": "^3.14.0",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
   }
 }
