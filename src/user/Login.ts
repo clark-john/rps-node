@@ -12,13 +12,13 @@ import {
 const prisma = new PrismaClient()
 
 const loginOrGuest = async () => {
-	let data
+	let data: any
 	let res = await userOrGuest()
 	if (res == 'Guest') {
 		data = "Guest"
 	}
 	else if (res == 'User') {
-		let userAndPassword
+		let userAndPassword: any
 		let fetchUsers = await prisma.user.findMany()
 		if (fetchUsers.length == 0) {
 			console.log("No users")
@@ -43,8 +43,9 @@ const loginOrGuest = async () => {
 				})
 				if (!pw) {}
  				else {
-					if (sha1(userAndPassword.password) == await pw.password) {
+					if (sha1(userAndPassword.password) == pw.password) {
 					} else {
+						console.log(red("Incorrect password"))
 						process.exit()
 					}
 				}
@@ -52,7 +53,7 @@ const loginOrGuest = async () => {
 		}
 		data = userAndPassword.user
 	} else {
-		let nameAndPass
+		let nameAndPass: any
 		while (true) {
 			nameAndPass = await registerNamePassword()
 			let confirmPass = await confirmPassword()
@@ -61,7 +62,6 @@ const loginOrGuest = async () => {
 			} else {
 				nameAndPass.password = sha1(nameAndPass.password)
 				break
-				return true
 			}
 		}
 		let details = await someDetails()
@@ -76,6 +76,7 @@ const loginOrGuest = async () => {
 				highscore: 0
 			}
 		})
+		data = nameAndPass.name
 	}
 	return data
 }

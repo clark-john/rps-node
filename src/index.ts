@@ -3,7 +3,7 @@ import { prompt } from 'inquirer'
 import { play } from './rps'
 import { tui } from './tui'
 import { gameInit } from './utils/gameInit'
-import { loginOrGuest } from './utils/Login'
+import { loginOrGuest } from './user/Login'
 import { getIniData } from './utils/getIniData'
 import os from 'os'
 import repl from 'repl'
@@ -45,16 +45,16 @@ const main = async () => {
 			answer = answer.ans.toLowerCase()
 			return answer
 		}).catch(err=>{throw err})
-		
+
 		if (ans == 'y') {
-			await play()
+			await play(userLoggedIn)
 			break
 		} else if (ans == 'n' || ans == 'exit') {
 			console.log("Exiting...")
 			process.exit()
 		} else if (ans == 'cmds'){
 			console.log('commands area')
-			await tui()
+			await tui(userLoggedIn)
 			break
 		} else if (ans == 'repl') {
 			repl.start('> ')
@@ -65,4 +65,7 @@ const main = async () => {
 		}
 	}
 }
+process.on('SIGINT', () => {
+	console.log("Aborted")
+})
 main()

@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 const autoIncrement = async () => {
 	let lookForGameNumber = await prisma.history.findMany()
-	let last
+	let last: number
 	if (lookForGameNumber.length == 0){
 		last = 1
 	} else {

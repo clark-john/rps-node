@@ -1,18 +1,33 @@
-import { PrismaClient } from '@prisma/client'
-import { log } from 'console'
-import { historyClearConfirmation as hCC } from '../utils/prompts'
+import  { PrismaClient } from '@prisma/client'
+import { historyClearConfirmation as hCC } from './prompts'
 import { green } from 'colorette'
 
 const prisma = new PrismaClient()
 
-const clearHist = async (confirm_needed) => {
+const clearHist = async (confirm_needed: boolean, userLoggedIn: string) => {
 	if (confirm_needed) {
+		let list = await prisma.history.findMany({
+			where: {
+				playedBy: userLoggedIn
+			}
+		})
+		
 		let confirm = await hCC()
+
 		if (confirm){
-			await prisma.history.deleteMany({})
-			log(green("History cleared successfully."))
+			if (list.length == 0) {
+				console.log("You've already cleared your history.")
+			}
+			else {
+				await prisma.history.deleteMany({
+					where: {
+						playedBy: userLoggedIn
+					}
+				})
+				console.log(green("History cleared successfully."))
+			}
 		} else {
-			log("History clearing aborted.")
+			console.log("History clearing aborted.")
 		}
 	} else {
 		await prisma.history.deleteMany({})

@@ -1,5 +1,6 @@
 dist/
 node_modules/
+backend/node_modules/
 testing/
 
 .idea
@@ -11,3 +12,8 @@ npm-error.log
 *.sublime-project
 
 prisma/migrations
+
+# files to edit soon
+src/user/editProfile.ts
+src/user/main.ts
+src/utils/isHighScore.ts

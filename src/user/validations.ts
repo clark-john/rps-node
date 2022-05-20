@@ -4,7 +4,7 @@ const NameValidationPattern =  /^[\w]{3,}$/
 const PasswordValidationPattern = /^[\w]{8,}$/
 const BirthDateValidationPattern = /^([1-9]|[12][\d]|3[01])$/
 
-const BirthDateValidation = (birthdate) => {
+const BirthDateValidation = (birthdate: string) => {
 	if (birthdate.match(BirthDateValidationPattern) === null) {
 		console.error(yellow("\nBirth date must be from 1 to 31."))
 	} else {
@@ -12,7 +12,7 @@ const BirthDateValidation = (birthdate) => {
 	}
 }
 
-const NameValidation = (name) => {
+const NameValidation = (name: string) => {
 	if (name.match(NameValidationPattern) === null) {
 		console.error(yellow("\nName must have equal or more than 3 characters."))
 	} else {
@@ -20,7 +20,7 @@ const NameValidation = (name) => {
 	}
 }
 
-const PasswordValidation = (password) => {
+const PasswordValidation = (password: string) => {
 	if (password.match(PasswordValidationPattern) === null) {
 		console.error(yellow("\nPassword must have equal or more than 8 characters."))
 	} else {

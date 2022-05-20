@@ -3,20 +3,30 @@ import { autoIncrement } from './autoIncrement'
 
 const prisma = new PrismaClient()
 
-const storeHist = async (user_score, comp_score, tie, total_games, datePlayed) => {
+interface historyQuery {
+  user_score: number,
+  comp_score: number,
+  tie: number,
+  total_games: number,
+  datePlayed: string,
+  userLoggedIn: string
+}
+
+const storeHist = async (query: historyQuery) => {
+
   const gamenumber = await autoIncrement()
   await prisma.history.create({
     data: {
       gamenumber: gamenumber,
-      wins: user_score,
-      loses: comp_score,
-      tie: tie,
-      total_games: total_games,
-      dateplayed: datePlayed
+      wins: query.user_score,
+      loses: query.comp_score,
+      tie: query.tie,
+      total_games: query.total_games,
+      dateplayed: query.datePlayed,
+      playedBy: query.userLoggedIn
     }
-  }).finally(async () => {
-    await prisma.$disconnect
   })
 }
 
 export { storeHist }
+export default historyQuery

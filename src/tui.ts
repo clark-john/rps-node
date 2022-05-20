@@ -7,12 +7,12 @@ import { readFileSync } from 'fs'
 import slugify from 'slugify'
 import { 
 	nameToSlugify 
-} from './utils/prompts' 
+} from './cmds/prompts' 
 
 const commands = readFileSync(locateFile('./src/cmds/commands.json'), 'utf8')
 const commands_list = JSON.parse(commands)
 
-const tui = async () => {
+const tui = async (userLoggedIn: string) => {
 	while (true) {
 		let cmd = await prompt(
 			[
@@ -33,7 +33,7 @@ const tui = async () => {
 		} else if (cmd == 'viewhist') {
 			log(await viewHist())
 		} else if (cmd == 'clearhist') {
-			await clearHist(true)
+			await clearHist(true, userLoggedIn)
 		} else if (cmd == 'histsize') {
 			log(await histSize())
 		} else if (cmd == 'slugify') {

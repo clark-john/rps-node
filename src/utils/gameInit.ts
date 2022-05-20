@@ -9,7 +9,7 @@ const maxhistsize = config.Database.max_histsize
 const gameInit = async () => {
 	let histsize = await prisma.history.findMany()
 	if (histsize.length == maxhistsize){
-		clearHist(false)
+		clearHist(false, '')
 	}
 }
 

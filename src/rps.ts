@@ -1,8 +1,7 @@
 import { log, error } from 'console'
 import { red, yellow, bold, green } from 'colorette'
 import { prompt } from 'inquirer'
-// import { getIniData } from './utils/getIniData'
-import { storeHist } from './utils/storeHistory'
+import historyQuery, { storeHist } from './utils/storeHistory'
 import random from 'random'
 import casual from 'casual'
 import moment from 'moment'
@@ -11,11 +10,9 @@ let user_score: number = 0
 let comp_score: number = 0
 let tie: number = 0
 
-const date = moment(Date.now()).format('LL')
-const time = moment(Date.now()).format('LTS')
-const datePlayed = `${date} ${time}`
-
-// const config = getIniData()
+const date: string = moment(Date.now()).format('LL')
+const time: string = moment(Date.now()).format('LTS')
+const datePlayed: string = `${date} ${time}`
 
 /*let rock_user: number = 0
 let paper_user: number = 0
@@ -24,7 +21,7 @@ let rock_c: number = 0
 let paper_c: number = 0
 let scissors_c: number = 0*/
 
-const play = async () => {
+const play = async (userLoggedIn: string) => {
   let compname: string = await prompt(
       [
         {
@@ -114,8 +111,18 @@ const play = async () => {
       log(compname+":",comp_score)
       log("Tie:",tie)
       log("Number of games:",total_games)
-      await storeHist(user_score, comp_score, tie, total_games, datePlayed)
+
+      const query: historyQuery = {
+        user_score,
+        comp_score,
+        tie,
+        total_games,
+        datePlayed,
+        userLoggedIn
+      } 
+      await storeHist(query)
       process.exit()
+      
     } else {
       log(red("Invalid option"))
     }

@@ -1,12 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// to switch db to postgres
-// replace provider with "postgresql"
+// to switch db to mysql
+// replace provider with "mysql"
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -19,6 +16,7 @@ model History {
   tie Int
   total_games Int
   dateplayed String @db.VarChar(30) @unique
+  playedBy String @db.VarChar(200)
 }
 
 model User {

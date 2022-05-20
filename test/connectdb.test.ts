@@ -10,7 +10,6 @@ const main = async () => {
 		return true
 	} catch(err) {
 		throw err
-		return false
 	} 
 }
 

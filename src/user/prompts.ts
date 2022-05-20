@@ -48,45 +48,6 @@ const userPassword = async () => {
 	return response
 }
 
-// tui related
-
-const nameToSlugify = async () => {
-	let response = await prompt(
-		[
-			{
-				"type": "input",
-				"name": "slug",
-				"message": "Type a string to slugify:"
-			}
-		]
-	).then(res => {
-		res = res.slug
-		return res
-	}).catch(err => {
-		throw err
-	})
-	return response
-}
-
-const historyClearConfirmation = async () => {
-	let response = await prompt(
-		[
-			{
-				"type": "confirm",
-				"name": "confirmation",
-				"message": "Are you sure you want to clear the history?"
-			}
-		]
-	).then(res=>{
-		res = res.confirmation
-		return res
-	})
-	.catch(err=>{
-		throw err
-	})
-	return response
-}
-
 // register related
 
 const registerNamePassword = async () => {
@@ -172,7 +133,6 @@ const someDetails = async () => {
 	return response
 }
 
-
 const main = async () => {
 // console.log(await name_password())	
 }
@@ -181,9 +141,7 @@ main()
 
 // exporting
 export { 
-	historyClearConfirmation,
 	userOrGuest,
-	nameToSlugify,
 	userPassword,
 	registerNamePassword,
 	confirmPassword,
