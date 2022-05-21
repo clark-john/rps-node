@@ -16,7 +16,7 @@ const prisma = new PrismaClient()
 const loginOrGuest = async () => {
 	let res = await userOrGuest()
 
-	if (await !getLogin()) {
+	if (await getLogin() == null) {
 		if (res == 'Guest') {
 			return "Guest"
 		}
@@ -36,7 +36,6 @@ const loginOrGuest = async () => {
 				}
 
 				const findme = usersList.includes(userAndPassword.user as never)
-				console.log(getLogin())
 
 				if ( !findme ){
 					console.log(`${yellow(userAndPassword.user)} doesn't exist.`)

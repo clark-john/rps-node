@@ -1,7 +1,14 @@
-import { rmSync } from 'fs'
+import { rm } from 'fs/promises'
+import { bold, green } from 'colorette'
 
-const Logout = () => {
-	rmSync('./src/user/.login.json', { force: true })
+const Logout = async () => {
+	await rm('./src/user/.login.json', { force: true })
+	.then(_ => {
+		console.log(bold(green("Logged out successfully")))
+	})
+	.catch(err => {
+		throw err
+	})
 }
 
 export { Logout }

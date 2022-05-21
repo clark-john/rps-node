@@ -10,5 +10,6 @@ npm-error.log
 *.sublime-workspace
 *.sublime-project
 
+# generated files
 src/user/.login.json
 src/hist/history.json

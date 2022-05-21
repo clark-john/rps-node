@@ -8,6 +8,7 @@ import {
 	nameToSlugify 
 } from './hist/prompts' 
 import { whoAmI } from './user/Login'
+import { Logout } from './user/Logout'
 
 const commands = readFileSync('./src/commands.json', 'utf8')
 const commands_list = JSON.parse(commands)
@@ -58,8 +59,11 @@ const tui = async (userLoggedIn: string) => {
 		else if (cmd == 'editprofile'){
 			await editProfile(userLoggedIn)
 		}
-		else if (cmd == 'whoami'){
-			console.log(await whoAmI())
+		else if (cmd == 'editprofile'){
+			await editProfile(userLoggedIn)
+		}
+		else if (cmd == 'logout'){
+			await Logout()
 		}
 		else {
 			console.log(red(`Command ${cmd} doesn't exist. Type "list" for a list of commands.`))
