@@ -1,18 +1,19 @@
-import { log } from 'console'
 import { red, bold, magenta } from 'colorette'
 import { prompt } from 'inquirer' 
-import { viewHist, clearHist, histSize } from './cmds/History'
-import { locateFile } from './utils/fileLocator'
+import { viewHist, clearHist, histSize } from './hist/History'
+import { editProfile } from './user/editProfile'
 import { readFileSync } from 'fs'
 import slugify from 'slugify'
 import { 
 	nameToSlugify 
-} from './cmds/prompts' 
+} from './hist/prompts' 
+import { whoAmI } from './user/Login'
 
-const commands = readFileSync(locateFile('./src/cmds/commands.json'), 'utf8')
+const commands = readFileSync('./src/commands.json', 'utf8')
 const commands_list = JSON.parse(commands)
 
 const tui = async (userLoggedIn: string) => {
+	// tui
 	while (true) {
 		let cmd = await prompt(
 			[
@@ -28,26 +29,40 @@ const tui = async (userLoggedIn: string) => {
 		}).catch(err => {
 			throw err
 		})
+
+		// commmands
 		if (cmd == 'exit') {
 			process.exit()
-		} else if (cmd == 'viewhist') {
-			log(await viewHist())
-		} else if (cmd == 'clearhist') {
+		} 
+		else if (cmd == 'viewhist') {
+			console.log(await viewHist())
+		} 
+		else if (cmd == 'clearhist') {
 			await clearHist(true, userLoggedIn)
-		} else if (cmd == 'histsize') {
-			log(await histSize())
-		} else if (cmd == 'slugify') {
+		} 
+		else if (cmd == 'histsize') {
+			console.log(await histSize())
+		} 
+		else if (cmd == 'slugify') {
 			let name = await nameToSlugify()
 			console.log(slugify(name))
-		} else if (cmd == 'list') {
+		} 
+		else if (cmd == 'list') {
 			for (let x = 0; x < commands_list.length; x++) {
 				console.log(bold(magenta(commands_list[x].command))+" - "+commands_list[x].usage)
 			}
-		} else if (cmd == 'cls' || cmd == 'clear'){
+		} 
+		else if (cmd == 'cls' || cmd == 'clear'){
 			console.clear()
 		}
+		else if (cmd == 'editprofile'){
+			await editProfile(userLoggedIn)
+		}
+		else if (cmd == 'whoami'){
+			console.log(await whoAmI())
+		}
 		else {
-			log(red(`Command ${cmd} doesn't exist. Type "list" for a list of commands.`))
+			console.log(red(`Command ${cmd} doesn't exist. Type "list" for a list of commands.`))
 		}
 	}
 }

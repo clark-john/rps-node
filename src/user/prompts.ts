@@ -12,7 +12,8 @@ const userOrGuest = () => {
 				"choices": [
 					"Guest",
 					"User",
-					"Register new one"
+					"Register new one",
+					"Exit"
 				]
 			}
 		]
@@ -133,11 +134,99 @@ const someDetails = async () => {
 	return response
 }
 
-const main = async () => {
-// console.log(await name_password())	
+// updating 
+const newName = async () => {
+	let newname = await prompt([{
+		"type": "input",
+		"name": "newname",
+		"message": "New name:",
+		"validate": NameValidation	
+	}])
+	return newname.newname
 }
-main()
+const newPassword = async () => {
+	let newpassword = await prompt([{
+		"type": "password",
+		"name": "newpw",
+		"message": "New password:",
+		"validate": PasswordValidation,
+		"mask": true
+	}]).then(res => {
+		return res.newpw
+	})
+	let confirmPassword = await prompt([{
+		"type": "password",
+		"name": "newpw",
+		"message": "Confirm password:",
+		"mask": true
+	}])
+	if (newpassword != confirmPassword){
+		console.log("Passwords doesn't match.")
+		return false
+	} else {
+		console.log("Password updated successfully.")
+		return newpassword.newpw
+	}
+}
+const newBirthMonth = async () => {
+	let newbirthmonth = await prompt([{
+		"type": "list",
+		"name": "birthmonth",
+		"message": "Choose new birth month",
+		"choices": [
+			"January", "February", "March", "April", "May", "June", 
+			"July", "August", "September", "October", "November", "December"
+		],
+		"loop": false
+	}])
+	return newbirthmonth.birthmonth
+}
+const newBirthDate = async () => {
+	let newbirthdate = await prompt([{
+		"type": "string",
+		"name": "birthdate",
+		"message": "Birth date (1-31)",
+		"validate": BirthDateValidation
+	}])
+	return newbirthdate.birthdate
+}
+const newBirthYear = async () => {
+	let newbirthyear = await prompt([{
+		"type": "number",
+		"name": "birthyear",
+		"message": "Enter new birth year:"
+	}])
+	return newbirthyear.birthyear
+}
 
+// what to edit and its interface
+interface Details {
+	name: string,
+	password: string,
+	bdate: number,
+	bmonth: string, 
+	byear: number
+}
+
+const whatToEdit = async (details: Details) => {
+	let whattoedit =  await prompt([{
+		"type": "list",
+		"name": "edit",
+		"message": "Edit profile | What to edit?",
+		"choices": [
+			`Name (currently ${details.name})`,
+			"Password",
+			`Birth date (currently ${details.bdate})`,
+			`Birth month (currently ${details.bmonth})`,
+			`Birth year (currently ${details.byear})`
+		]
+	}])
+	return whattoedit.edit
+}
+
+// const main = async () => {
+// }
+// main()
 
 // exporting
 export { 
@@ -145,5 +234,12 @@ export {
 	userPassword,
 	registerNamePassword,
 	confirmPassword,
-	someDetails
+	someDetails,
+	newName,
+	newPassword,
+	newBirthMonth,
+	newBirthDate,
+	newBirthYear,
+	whatToEdit
 }
+export default Details

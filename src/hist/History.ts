@@ -1,6 +1,7 @@
 import  { PrismaClient } from '@prisma/client'
 import { historyClearConfirmation as hCC } from './prompts'
 import { green } from 'colorette'
+import { writeFileSync } from 'fs'
 
 const prisma = new PrismaClient()
 
@@ -36,6 +37,7 @@ const clearHist = async (confirm_needed: boolean, userLoggedIn: string) => {
 
 const viewHist = async () => {
 	const gameHistory = await prisma.history.findMany()
+	const file = writeFileSync('./src/hist/history.json', JSON.stringify(gameHistory))
 	return gameHistory
 }
 

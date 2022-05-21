@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { autoIncrement } from './autoIncrement'
+import { isHighScore } from './isHighScore'
 
 const prisma = new PrismaClient()
 
@@ -13,7 +14,9 @@ interface historyQuery {
 }
 
 const storeHist = async (query: historyQuery) => {
-
+  if (query.userLoggedIn != "Guest") {
+    isHighScore(query.user_score, query.userLoggedIn)
+  }
   const gamenumber = await autoIncrement()
   await prisma.history.create({
     data: {

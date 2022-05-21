@@ -7,10 +7,11 @@ import { loginOrGuest } from './user/Login'
 import { getIniData } from './utils/getIniData'
 import os from 'os'
 import repl from 'repl'
+import isWindows from 'is-windows'
 
 let system = os.type()
 const node_version = process.version
-if (system == 'Windows_NT'){
+if (isWindows()){
 	system = 'Windows'
 } else if (system == 'Darwin'){
 	system = 'Mac OS'
@@ -65,7 +66,5 @@ const main = async () => {
 		}
 	}
 }
-process.on('SIGINT', () => {
-	console.log("Aborted")
-})
+
 main()
