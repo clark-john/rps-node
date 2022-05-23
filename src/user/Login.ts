@@ -1,4 +1,4 @@
-import { red, yellow, green } from 'colorette'
+import { red, yellow } from 'colorette'
 import { PrismaClient } from '@prisma/client'
 import { Logout } from './Logout'
 import { pushLogin, getLogin } from './sendLoginToJSON'

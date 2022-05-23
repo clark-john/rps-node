@@ -37,7 +37,7 @@ const clearHist = async (confirm_needed: boolean, userLoggedIn: string) => {
 
 const viewHist = async () => {
 	const gameHistory = await prisma.history.findMany()
-	const file = writeFileSync('./src/hist/history.json', JSON.stringify(gameHistory))
+	writeFileSync('./src/hist/history.json', JSON.stringify(gameHistory))
 	return gameHistory
 }
 
