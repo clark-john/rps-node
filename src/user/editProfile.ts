@@ -42,7 +42,7 @@ const editProfile = async (userLoggedIn: string) => {
         data: {
           name: newname
         }
-      }).then(_ => {
+      }).then(() => {
         console.log("Name updated successfully.")
       })
     } else if (whattoedit.slice(0,10) == "Birth date") {
@@ -54,7 +54,7 @@ const editProfile = async (userLoggedIn: string) => {
         data: {
           birthdate: Number(newbirthdate)
         }
-      }).then(_ => {
+      }).then(() => {
         console.log("Birth date updated successfully.")
       })
     } else if (whattoedit.slice(0,11) == "Birth month") {
@@ -66,7 +66,7 @@ const editProfile = async (userLoggedIn: string) => {
         data: {
           birthmonth: newbirthmonth
         }
-      }).then(_ => {
+      }).then(() => {
         console.log("Birth month updated successfully.")
       })
     } else if (whattoedit.slice(0,10) == "Birth year") {
@@ -78,7 +78,7 @@ const editProfile = async (userLoggedIn: string) => {
         data: {
           birthyear: newbirthyear
         }
-      }).then(_ => {
+      }).then(() => {
         console.log("Birth year updated successfully.")
       })
     } else {
@@ -90,7 +90,7 @@ const editProfile = async (userLoggedIn: string) => {
         data: {
           password: newpassword
         }
-      }).then(_ => {
+      }).then(() => {
         console.log("Password updated successfully.")
       })
     }

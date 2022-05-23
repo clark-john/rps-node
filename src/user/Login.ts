@@ -1,7 +1,7 @@
-import { red, yellow } from 'colorette'
+import { red, yellow, green } from 'colorette'
 import { PrismaClient } from '@prisma/client'
+import { Logout } from './Logout'
 import { pushLogin, getLogin } from './sendLoginToJSON'
-import { readFileSync } from 'fs'
 import sha1 from 'sha1' 
 import { 
 	userOrGuest, 
@@ -20,7 +20,7 @@ const loginOrGuest = async () => {
 		if (res == 'Guest') {
 			return "Guest"
 		}
-		else if (res == 'User') {
+		else if (res.slice(0,4) == 'User') {
 			let userAndPassword: any
 			let fetchUsers = await prisma.user.findMany()
 			if (fetchUsers.length == 0) {
@@ -57,6 +57,9 @@ const loginOrGuest = async () => {
 				}
 			}
 			return userAndPassword.user
+		} else if (res == "Logout") {
+			console.log("Currently no logged in users.")
+			process.exit(0)
 		} else if (res == "Exit") {
 			process.exit(0)
 		} else {
@@ -89,7 +92,12 @@ const loginOrGuest = async () => {
 	} else {
 		if (res == 'Guest') {
 			return res
-		} else {
+		} else if (res == 'Logout') {
+			await Logout()
+			process.exit(0)
+		} else if (res == 'Exit') {
+			process.exit(0)
+		}	else {
 			return await getLogin()
 		}
 	}

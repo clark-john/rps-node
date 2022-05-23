@@ -59,8 +59,8 @@ const tui = async (userLoggedIn: string) => {
 		else if (cmd == 'editprofile'){
 			await editProfile(userLoggedIn)
 		}
-		else if (cmd == 'editprofile'){
-			await editProfile(userLoggedIn)
+		else if (cmd == 'whoami'){
+			if (userLoggedIn != 'Guest') {console.log(await whoAmI())}
 		}
 		else if (cmd == 'logout'){
 			await Logout()

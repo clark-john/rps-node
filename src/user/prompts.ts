@@ -1,9 +1,10 @@
 import { prompt } from 'inquirer'
 import { NameValidation, PasswordValidation, BirthDateValidation } from './validations'
+import { getLogin } from './sendLoginToJSON'
 
 // Login related things
-const userOrGuest = () => {
-	let response: Promise<string> = prompt(
+const userOrGuest = async () => {
+	let response: Promise<string> = await prompt(
 		[
 			{
 				"type": "list",
@@ -11,8 +12,9 @@ const userOrGuest = () => {
 				"message": "Login as user or guest? Don't have an account? Choose \"Register new one\"",
 				"choices": [
 					"Guest",
-					"User",
+					`User ${await getLogin() == null ? '' : `(${await getLogin()})` }`,
 					"Register new one",
+					"Logout",
 					"Exit"
 				]
 			}

@@ -1,5 +1,5 @@
 import { writeFile, readFile } from 'fs/promises'
-import { hide, reveal, isHiddenSync } from "hidefile";
+import { hide } from "hidefile";
 import fileExists from "file-exists";
 
 const jsonpath = './src/user/login.json'
@@ -15,7 +15,7 @@ const pushLogin = async (userLoggedIn: string) => {
 	if (await fileExists(jsonpath).then(exists => {
 		return exists
 	})){
-		hide(jsonpath, (err, newpath) => {})	
+		hide(jsonpath, () => {void(0)})	
 	}
 }
 const getLogin = async () => {

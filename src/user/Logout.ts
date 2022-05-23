@@ -3,7 +3,7 @@ import { bold, green } from 'colorette'
 
 const Logout = async () => {
 	await rm('./src/user/.login.json', { force: true })
-	.then(_ => {
+	.then(() => {
 		console.log(bold(green("Logged out successfully")))
 	})
 	.catch(err => {

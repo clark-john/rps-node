@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const main = async () => {
+const connectDB = async () => {
 	try {
 		// simple db operation to test db activity
 		let db = await prisma.history.findMany()
@@ -14,5 +14,5 @@ const main = async () => {
 }
 
 test('Connect Database', async () => {
-	expect(await main()).toBe(true)
+	expect(await connectDB()).toBe(true)
 })

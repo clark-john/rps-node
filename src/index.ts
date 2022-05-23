@@ -30,7 +30,7 @@ const main = async () => {
 	}
 	while (true) {
 		await gameInit()
-		console.log(green("Welcome to rps-python!"))
+		console.log(green("Welcome to rps-node!"))
 		console.log(yellow(`You're using ${system} as of now.`))
 		console.log(yellow(bold(`You're using Node ${node_version}`)))
 		console.log("Wanna play? Type 'y' to start the game or type 'n' if you're exiting.")
