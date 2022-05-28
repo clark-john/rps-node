@@ -4,7 +4,7 @@ import { play } from './rps'
 import { tui } from './tui'
 import { gameInit } from './utils/gameInit'
 import { loginOrGuest } from './user/Login'
-import { getIniData } from './utils/getIniData'
+import { getConfigData } from './utils/getConfigData'
 import os from 'os'
 import repl from 'repl'
 import isWindows from 'is-windows'
@@ -17,9 +17,9 @@ if (isWindows()){
 	system = 'Mac OS'
 }
 
-const config = getIniData()
+const config = getConfigData()
 
-process.title = config.Game.window_title
+process.title = config.game.window_title
 
 const main = async () => {
 	let userLoggedIn = await loginOrGuest()

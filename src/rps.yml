@@ -1,0 +1,4 @@
+database:
+  max_histsize: 150
+game:
+  window_title: "Rock Paper Scissors - Node"
