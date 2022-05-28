@@ -1,17 +1,13 @@
-import  { PrismaClient } from '@prisma/client'
 import { historyClearConfirmation as hCC } from './prompts'
 import { green } from 'colorette'
 import { writeFileSync } from 'fs'
-
-const prisma = new PrismaClient()
+import { History } from '../utils/Schema'
+import { connectDB } from '../utils/connectDB'
 
 const clearHist = async (confirm_needed: boolean, userLoggedIn: string) => {
+	await connectDB()
 	if (confirm_needed) {
-		let list = await prisma.history.findMany({
-			where: {
-				playedBy: userLoggedIn
-			}
-		})
+		let list = await History.find({ playedBy: userLoggedIn })
 		
 		let confirm = await hCC()
 
@@ -20,29 +16,27 @@ const clearHist = async (confirm_needed: boolean, userLoggedIn: string) => {
 				console.log("You've already cleared your history.")
 			}
 			else {
-				await prisma.history.deleteMany({
-					where: {
-						playedBy: userLoggedIn
-					}
-				})
+				await History.deleteMany({ playedBy: userLoggedIn })
 				console.log(green("History cleared successfully."))
 			}
 		} else {
 			console.log("History clearing aborted.")
 		}
 	} else {
-		await prisma.history.deleteMany({})
+		await History.deleteMany({})
 	}
 }
 
 const viewHist = async () => {
-	const gameHistory = await prisma.history.findMany()
+	await connectDB()
+	const gameHistory = await History.find()
 	writeFileSync('./src/hist/history.json', JSON.stringify(gameHistory))
 	return gameHistory
 }
 
 const histSize = async () => {
-	let histsizeQuery = await prisma.history.findMany()
+	await connectDB()
+	let histsizeQuery = await History.find()
 	let histsize = histsizeQuery.length
 	return histsize
 }

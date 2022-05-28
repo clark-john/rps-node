@@ -5,6 +5,7 @@ import historyQuery, { storeHist } from './utils/storeHistory'
 import random from 'random'
 import casual from 'casual'
 import moment from 'moment'
+import mongoose from 'mongoose'
 
 let user_score: number = 0
 let comp_score: number = 0
@@ -120,7 +121,7 @@ const play = async (userLoggedIn: string) => {
         datePlayed,
         userLoggedIn
       } 
-      await storeHist(query)
+      await storeHist(query).finally(() => {mongoose.disconnect()})
       process.exit()
       
     } else {

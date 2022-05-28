@@ -3,6 +3,7 @@ import { prompt } from 'inquirer'
 import { viewHist, clearHist, histSize } from './hist/History'
 import { editProfile } from './user/editProfile'
 import { readFileSync } from 'fs'
+import mongoose from 'mongoose'
 import slugify from 'slugify'
 import { 
 	nameToSlugify 
@@ -36,13 +37,13 @@ const tui = async (userLoggedIn: string) => {
 			process.exit()
 		} 
 		else if (cmd == 'viewhist') {
-			console.log(await viewHist())
+			console.log(await viewHist().finally(() => {mongoose.disconnect()}))
 		} 
 		else if (cmd == 'clearhist') {
-			await clearHist(true, userLoggedIn)
+			await clearHist(true, userLoggedIn).finally(() => {mongoose.disconnect()})
 		} 
 		else if (cmd == 'histsize') {
-			console.log(await histSize())
+			console.log(await histSize().finally(() => {mongoose.disconnect()}))
 		} 
 		else if (cmd == 'slugify') {
 			let name = await nameToSlugify()
@@ -57,7 +58,7 @@ const tui = async (userLoggedIn: string) => {
 			console.clear()
 		}
 		else if (cmd == 'editprofile'){
-			await editProfile(userLoggedIn)
+			await editProfile(userLoggedIn).finally(() => {mongoose.disconnect()})
 		}
 		else if (cmd == 'whoami'){
 			if (userLoggedIn != 'Guest') {console.log(await whoAmI())}

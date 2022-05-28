@@ -1,4 +1,6 @@
-import { PrismaClient, User } from "@prisma/client"
+import { User } from '../utils/Schema'
+import 'dotenv/config'
+import mongoose from 'mongoose'
 import Details, {
   newName,
   newPassword,
@@ -9,15 +11,10 @@ import Details, {
 } from './prompts'
 import sha1 from 'sha1'
 
-const prisma = new PrismaClient()
-
-// fetch user info
+// mongoose implementation
 const fetchInfo = async (userLoggedIn: string) => {
-  let info: User | null = await prisma.user.findFirst({
-    where: {
-      name: userLoggedIn
-    }
-  })
+  await mongoose.connect(process.env.MONGODB_URI as string)
+  let info = await User.findOne({ name: userLoggedIn })
   return info
 }
 
@@ -35,63 +32,59 @@ const editProfile = async (userLoggedIn: string) => {
 
     if (whattoedit.slice(0,4) == "Name") {
       let newname = await newName()
-      await prisma.user.update({
-        where: {
-          name: userLoggedIn
-        },
-        data: {
-          name: newname
-        }
-      }).then(() => {
-        console.log("Name updated successfully.")
+      await User.updateOne(
+        { name: userLoggedIn },
+        { name: newname }
+      ).then(() => {3
+        console.log("Name updateOned successfully.")
       })
     } else if (whattoedit.slice(0,10) == "Birth date") {
       let newbirthdate = await newBirthDate()
-      await prisma.user.update({
-        where: {
+      await User.updateOne(
+        {
           name: userLoggedIn
         },
-        data: {
+        {
           birthdate: Number(newbirthdate)
         }
-      }).then(() => {
-        console.log("Birth date updated successfully.")
+      ).then(() => {
+        console.log("Birth date updateOned successfully.")
       })
     } else if (whattoedit.slice(0,11) == "Birth month") {
       let newbirthmonth = await newBirthMonth()
-      await prisma.user.update({
-        where: {
+      await User.updateOne(
+        {
           name: userLoggedIn
         },
-        data: {
+        {
           birthmonth: newbirthmonth
         }
-      }).then(() => {
-        console.log("Birth month updated successfully.")
+      ).then(() => {
+        console.log("Birth month updateOned successfully.")
       })
     } else if (whattoedit.slice(0,10) == "Birth year") {
       let newbirthyear = await newBirthYear()
-      await prisma.user.update({
-        where: {
+      await User.updateOne(
+        {
           name: userLoggedIn
         },
-        data: {
+        {
           birthyear: newbirthyear
         }
-      }).then(() => {
-        console.log("Birth year updated successfully.")
+      ).then(() => {
+        console.log("Birth year updateOned successfully.")
       })
     } else {
       let newpassword = sha1(await newPassword())
-      await prisma.user.update({
-        where: {
+      await User.updateOne(
+        {
           name: userLoggedIn
         },
-        data: {
+        {
           password: newpassword
         }
-      }).then(() => {
-        console.log("Password updated successfully.")
+      ).then(() => {
+        console.log("Password updateOned successfully.")
       })
     }
   }

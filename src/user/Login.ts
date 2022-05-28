@@ -1,8 +1,10 @@
+import 'dotenv/config'
+import mongoose from 'mongoose'
 import { red, yellow } from 'colorette'
-import { PrismaClient } from '@prisma/client'
 import { Logout } from './Logout'
 import { pushLogin, getLogin } from './sendLoginToJSON'
 import sha1 from 'sha1' 
+import { User } from '../utils/Schema'
 import { 
 	userOrGuest, 
 	userPassword, 
@@ -11,9 +13,8 @@ import {
 	someDetails
 } from './prompts'
 
-const prisma = new PrismaClient()
-
 const loginOrGuest = async () => {
+	await mongoose.connect(process.env.MONGODB_URI as string)
 	let res = await userOrGuest()
 
 	if (await getLogin() == null) {
@@ -22,12 +23,13 @@ const loginOrGuest = async () => {
 		}
 		else if (res.slice(0,4) == 'User') {
 			let userAndPassword: any
-			let fetchUsers = await prisma.user.findMany()
+			let fetchUsers = await User.find()
 			if (fetchUsers.length == 0) {
 				console.log("No users")
+				process.exit()
 			} 
 			else {
-				const usersArray = await prisma.user.findMany()
+				const usersArray = await User.find()
 				userAndPassword = await userPassword()
 				
 				const usersList = []
@@ -41,11 +43,7 @@ const loginOrGuest = async () => {
 					console.log(`${yellow(userAndPassword.user)} doesn't exist.`)
 					process.exit(0)
 				} else {
-					let pw = await prisma.user.findFirst({
-						where: {
-							name: userAndPassword.user
-						}
-					})
+					let pw = await User.findOne({ name: userAndPassword.user })
 					if (pw) {
 						if (sha1(userAndPassword.password) == pw.password) {
 							pushLogin(userAndPassword.user)
@@ -55,8 +53,8 @@ const loginOrGuest = async () => {
 						}
 					}
 				}
+				return userAndPassword.user
 			}
-			return userAndPassword.user
 		} else if (res == "Logout") {
 			console.log("Currently no logged in users.")
 			process.exit(0)
@@ -75,16 +73,15 @@ const loginOrGuest = async () => {
 				}
 			}
 			let details = await someDetails()
-			await prisma.user.create({
-				data: {
-					name: nameAndPass.name,
-					password: nameAndPass.password,
-					birthdate: Number(details.birthdate),
-					birthmonth: details.birthmonth,
-					birthyear: details.birthyear,
-					gender: details.gender,
-					highscore: 0
-				}
+			new User()
+			await User.create({				
+				name: nameAndPass.name,
+				password: nameAndPass.password,
+				birthdate: Number(details.birthdate),
+				birthmonth: details.birthmonth,
+				birthyear: details.birthyear,
+				gender: details.gender,
+				highscore: 0
 			})
 			pushLogin(nameAndPass.name)
 			return nameAndPass.name
