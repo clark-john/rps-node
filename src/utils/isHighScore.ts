@@ -14,17 +14,12 @@ const isHighScore = async (user_score: number, userLoggedIn: string) => {
   if (info) {
     if (user_score > info.highscore) {
       console.log(`New high score: ${user_score}`)
-      await User.update(
+      await User.updateOne(
         { name: info.name },
         { highscore: user_score }
       )
     } 
   } 
 }
-
-// const main = (s: string) => {
-//   isHighScore(2,s)
-// }
-// main('clark')
 
 export { isHighScore }

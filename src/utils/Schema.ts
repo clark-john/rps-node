@@ -6,6 +6,13 @@ const historySchema = new Schema({
 	loses: Number,
 	tie: Number,
 	total_games: Number,
+	rock_user: Number,
+	scissors_user: Number,
+	paper_user: Number,
+	rock_comp: Number,
+	scissors_comp: Number,
+	paper_comp: Number,
+	comp_name: String,
 	datePlayed: String,
 	playedBy: String
 })
