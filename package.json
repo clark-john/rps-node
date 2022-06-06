@@ -21,7 +21,7 @@
   "dependencies": {
     "@prisma/client": "^3.14.0",
     "casual": "^1.6.2",
-    "colorette": "^2.0.16",
+    "colorette": "^2.0.17",
     "cross-env": "^7.0.3",
     "file-exists": "^5.0.1",
     "hidefile": "^3.0.0",
