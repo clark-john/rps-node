@@ -1,5 +1,6 @@
 import { PrismaClient, User } from "@prisma/client"
-import Details, {
+import {
+  Details,
   newName,
   newPassword,
   newBirthDate,
@@ -33,7 +34,7 @@ const editProfile = async (userLoggedIn: string) => {
     }
     let whattoedit = await whatToEdit(details)
 
-    if (whattoedit.slice(0,4) == "Name") {
+    if (whattoedit == "Name") {
       let newname = await newName()
       await prisma.user.update({
         where: {
@@ -45,7 +46,7 @@ const editProfile = async (userLoggedIn: string) => {
       }).then(() => {
         console.log("Name updated successfully.")
       })
-    } else if (whattoedit.slice(0,10) == "Birth date") {
+    } else if (whattoedit == "Birth date") {
       let newbirthdate = await newBirthDate()
       await prisma.user.update({
         where: {
@@ -57,7 +58,7 @@ const editProfile = async (userLoggedIn: string) => {
       }).then(() => {
         console.log("Birth date updated successfully.")
       })
-    } else if (whattoedit.slice(0,11) == "Birth month") {
+    } else if (whattoedit == "Birth month") {
       let newbirthmonth = await newBirthMonth()
       await prisma.user.update({
         where: {
@@ -69,7 +70,7 @@ const editProfile = async (userLoggedIn: string) => {
       }).then(() => {
         console.log("Birth month updated successfully.")
       })
-    } else if (whattoedit.slice(0,10) == "Birth year") {
+    } else if (whattoedit == "Birth year") {
       let newbirthyear = await newBirthYear()
       await prisma.user.update({
         where: {

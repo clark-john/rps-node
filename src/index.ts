@@ -1,12 +1,13 @@
 import { yellow, magenta, green, bold, red } from 'colorette'
-import { prompt } from 'inquirer'
 import { play } from './rps'
 import { tui } from './tui'
 import { gameInit } from './utils/gameInit'
 import { loginOrGuest } from './user/Login'
 import { getConfigData } from './utils/getConfigData'
+import { onCancel } from './utils/onCancel'
 import os from 'os'
 import repl from 'repl'
+import prompts from 'prompts'
 import isWindows from 'is-windows'
 
 let system = os.type()
@@ -19,9 +20,9 @@ if (isWindows()){
 
 const config = getConfigData()
 
-process.title = config.game.window_title
+process.title = config.game.window_title;
 
-const main = async () => {
+(async () => {
 	let userLoggedIn = await loginOrGuest()
 	if (userLoggedIn == 'Guest') {
 		console.log(yellow("You're not logged in. To save your high score, please log in or create a new account."))
@@ -36,28 +37,24 @@ const main = async () => {
 		console.log("Wanna play? Type 'y' to start the game or type 'n' if you're exiting.")
 		console.log(magenta("Type \"cmds\" for special commands."))
 
-		let ans = await prompt([
-			{
-				'type': 'input',
-				'name': 'ans',
-				'message': '> '	
-			}
-		]).then(answer=>{
-			answer = answer.ans.toLowerCase()
-			return answer
-		}).catch(err=>{throw err})
+		let ans = await prompts({
+			type: 'text',
+			name: 'ans',
+			message: ''
+		}, { onCancel })
+		let res = ans.ans
 
-		if (ans == 'y') {
+		if (res == 'y') {
 			await play(userLoggedIn)
 			break
-		} else if (ans == 'n' || ans == 'exit') {
+		} else if (res == 'n' || res == 'exit') {
 			console.log("Exiting...")
 			process.exit()
-		} else if (ans == 'cmds'){
+		} else if (res == 'cmds'){
 			console.log('commands area')
 			await tui(userLoggedIn)
 			break
-		} else if (ans == 'repl') {
+		} else if (res == 'repl') {
 			repl.start('> ')
 			break
 		} 
@@ -65,6 +62,6 @@ const main = async () => {
 			console.log(red("invalid"))
 		}
 	}
-}
+})()
 
-main()
+// we are migrating from inquirer to prompts :D

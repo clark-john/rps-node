@@ -1,4 +1,4 @@
-import  { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { historyClearConfirmation as hCC } from './prompts'
 import { green } from 'colorette'
 import { writeFileSync } from 'fs'

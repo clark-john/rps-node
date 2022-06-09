@@ -5,9 +5,10 @@ import fileExists from "file-exists";
 const jsonpath = './src/user/login.json'
 const jsonpath_hidden = './src/user/.login.json'
 
-const pushLogin = async (userLoggedIn: string) => {
+const pushLogin = async (userLoggedIn: string, rememberPass: boolean) => {
 	const json = {
 		name: userLoggedIn,
+		rememberPassword: rememberPass
 	}
 	const data = JSON.stringify(json)
 	await writeFile(jsonpath, data)
@@ -22,7 +23,7 @@ const getLogin = async () => {
 	try {
 		const jsonfile = await readFile(jsonpath_hidden, 'utf8')
 		const parseJSON = JSON.parse(jsonfile)
-		return parseJSON.name
+		return parseJSON
 	} catch(err) {
 		return null 
 	}

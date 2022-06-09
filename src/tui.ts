@@ -1,14 +1,13 @@
 import { red, bold, magenta } from 'colorette'
-import { prompt } from 'inquirer' 
 import { viewHist, clearHist, histSize } from './hist/History'
 import { editProfile } from './user/editProfile'
 import { readFileSync } from 'fs'
-import slugify from 'slugify'
-import { 
-	nameToSlugify 
-} from './hist/prompts' 
+import { nameToSlugify } from './hist/prompts' 
 import { whoAmI } from './user/Login'
 import { Logout } from './user/Logout'
+import { onCancel } from './utils/onCancel'
+import prompts from 'prompts'
+import slugify from 'slugify'
 
 const commands = readFileSync('./src/commands.json', 'utf8')
 const commands_list = JSON.parse(commands)
@@ -16,21 +15,12 @@ const commands_list = JSON.parse(commands)
 const tui = async (userLoggedIn: string) => {
 	// tui
 	while (true) {
-		let cmd = await prompt(
-			[
-				{
-					"type": "input",
-					"name": "cmd",
-					"message": "> "
-				}
-			]
-		).then(ans => {
-			ans = ans.cmd
-			return ans
-		}).catch(err => {
-			throw err
-		})
-
+		let ans = await prompts({
+			type: "text",
+			name: "command",
+			message: ""
+		}, { onCancel })
+		let cmd = ans.command
 		// commmands
 		if (cmd == 'exit') {
 			process.exit()

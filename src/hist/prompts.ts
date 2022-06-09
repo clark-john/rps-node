@@ -1,40 +1,21 @@
-import { prompt } from 'inquirer'
+import prompts from 'prompts'
 
 const historyClearConfirmation = async () => {
-	let response = await prompt(
-		[
-			{
-				"type": "confirm",
-				"name": "confirmation",
-				"message": "Are you sure you want to clear the history?"
-			}
-		]
-	).then(res=>{
-		res = res.confirmation
-		return res
+	let response = await prompts({
+		type: "confirm",
+		name: "confirmation",
+		message: "Are you sure you want to clear the history?"
 	})
-	.catch(err=>{
-		throw err
-	})
-	return response
+	return response.confirmation
 }
 
 const nameToSlugify = async () => {
-	let response = await prompt(
-		[
-			{
-				"type": "input",
-				"name": "slug",
-				"message": "Type a string to slugify:"
-			}
-		]
-	).then(res => {
-		res = res.slug
-		return res
-	}).catch(err => {
-		throw err
+	let response = await prompts({
+		type: "text",
+		name: "slug",
+		message: "Type a string to slugify:"
 	})
-	return response
+	return response.slug
 }
 
 export { 

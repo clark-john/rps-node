@@ -1,10 +1,11 @@
-import { log, error } from 'console'
+import { log } from 'console'
 import { red, yellow, bold, green } from 'colorette'
-import { prompt } from 'inquirer'
-import historyQuery, { storeHist } from './utils/storeHistory'
+import { historyQuery, storeHist } from './hist/storeHistory'
+import prompts from 'prompts'
 import random from 'random'
 import casual from 'casual'
 import moment from 'moment'
+import { onCancel } from './utils/onCancel'
 
 let user_score: number = 0
 let comp_score: number = 0
@@ -14,34 +15,21 @@ const date: string = moment(Date.now()).format('LL')
 const time: string = moment(Date.now()).format('LTS')
 const datePlayed: string = `${date} ${time}`
 
-/*let rock_user: number = 0
-let paper_user: number = 0
-let scissors_user: number = 0
-let rock_c: number = 0
-let paper_c: number = 0
-let scissors_c: number = 0*/
-
 const play = async (userLoggedIn: string) => {
-  let compname: string = await prompt(
-      [
-        {
-          'type': 'input',
-          'name': 'compname',
-          'message': "Enter the name of your player, or type \"none\" to skip.\nType \"random\" to generate.\nType \"cancel\" or \"exit\" to terminate this program.\n"
-        }
-      ]
-    ).then(ans=>{
-    ans = ans.compname
-    if (ans == '' || ans.toLowerCase() == 'none'){
-      ans = "Computer"
-    } else if (ans.toLowerCase() == 'exit' || ans.toLowerCase() == 'cancel'){
-      log("Exiting...")
-      process.exit()
-    } else if (ans.toLowerCase() == 'random') {
-      ans = casual.full_name
-    }
-    return ans
-  }).catch(err=>{error(err)})
+  let computer_name = await prompts({
+    type: 'text',
+    name: 'compname',
+    message: "Enter the name of your player, or type \"none\" to skip.\nType \"random\" to generate.\nType \"cancel\" or \"exit\" to terminate this program.\n"
+  }, { onCancel })
+  let compname = computer_name.compname
+  if (compname == '' || compname.toLowerCase() == 'none'){
+    compname = "Computer"
+  } else if (compname.toLowerCase() == 'exit' || compname.toLowerCase() == 'cancel'){
+    log("Exiting...")
+    process.exit()
+  } else if (compname.toLowerCase() == 'random') {
+    compname = casual.full_name
+  }
 
   const lose = bold(red("You lose."))
   const win = bold(green("You won."))
@@ -52,18 +40,12 @@ const play = async (userLoggedIn: string) => {
     else if ( computer_action == 2){ computer_action = 'scissors'}
     else { computer_action = 'paper' }
 
-    let user_action = await prompt(
-      [
-        {
-          'type': 'input',
-          'name': 'action',
-          'message': "Enter a choice: (rock, paper, scissors)\nNote: This is not case sensitive, but don't shortcut any of these words."
-        }
-      ]
-    ).then(ans => {
-      let user_act = ans.action 
-      return user_act
-    }).catch(err => {error(err)})
+    let user_act = await prompts({
+      type: 'text',
+      name: 'action',
+      message: "Enter a choice: (rock, paper, scissors)\nNote: This is not case sensitive, but don't shortcut any of these words."
+    }, { onCancel })
+    let user_action = user_act.action 
 
     if (user_action == computer_action){
       log('You choose',user_action)
@@ -105,24 +87,30 @@ const play = async (userLoggedIn: string) => {
         user_score += 1
       }
     } else if (user_action == 'end'){
-      let total_games: number = user_score + comp_score + tie
-      log("the game ends")
-      log("You:",user_score)
-      log(compname+":",comp_score)
-      log("Tie:",tie)
-      log("Number of games:",total_games)
+      let confirm = await prompts({
+        type: 'confirm',
+        name: 'end',
+        message: 'Are you sure?'  
+      })
+      if (confirm.end) {
+        let total_games: number = user_score + comp_score + tie
+        log("the game ends")
+        log("You:",user_score)
+        log(compname+":",comp_score)
+        log("Tie:",tie)
+        log("Number of games:",total_games)
 
-      const query: historyQuery = {
-        user_score,
-        comp_score,
-        tie,
-        total_games,
-        datePlayed,
-        userLoggedIn
-      } 
-      await storeHist(query)
-      process.exit()
-      
+        const query: historyQuery = {
+          user_score,
+          comp_score,
+          tie,
+          total_games,
+          datePlayed,
+          userLoggedIn
+        } 
+        await storeHist(query)
+        process.exit()
+      }
     } else {
       log(red("Invalid option"))
     }

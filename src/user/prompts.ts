@@ -1,167 +1,160 @@
-import { prompt } from 'inquirer'
-import { NameValidation, PasswordValidation, BirthDateValidation } from './validations'
 import { getLogin } from './sendLoginToJSON'
+import { onCancel } from '../utils/onCancel'
+import prompts from 'prompts'
+
+const NameValidationPattern =  /^[\w]{3,}$/
+const PasswordValidationPattern = /^[\w]{8,}$/
+const BirthDateValidationPattern = /^([1-9]|[12][\d]|3[01])$/
+
+const nameInvalidErr = "Name must have equal or more than 3 characters."
+const passwordInvalidErr = "Password must have equal or more than 8 characters."
+const birthdateInvalidErr = "Birth date must be from 1 to 31."
 
 // Login related things
 const userOrGuest = async () => {
-	let response: Promise<string> = await prompt(
-		[
-			{
-				"type": "list",
-				"name": "login",
-				"message": "Login as user or guest? Don't have an account? Choose \"Register new one\"",
-				"choices": [
-					"Guest",
-					`User ${await getLogin() == null ? '' : `(${await getLogin()})` }`,
-					"Register new one",
-					"Logout",
-					"Exit"
-				]
-			}
+	let user = await getLogin() == null ? '' : await getLogin()
+	let response = await prompts({
+		type: "select",
+		name: "login",
+		message: "Login as user or guest? Don't have an account? Choose \"Register new one\"",
+		"choices": [
+			{ title: "Guest", value: "Guest" },
+			{ title: `User ${user.name ? `(${user.name})` : ''}`, value: "User" },
+			{ title: "Register new one", value: "Register new one" },
+			{ title: "Logout", value: "Logout" },
+			{ title: "Exit", value: "Exit" }
 		]
-	).then(res => {
-		res = res.login
-		return res
-	}).catch(err => {
-		throw err
 	})
-	return response
+	return response.login
 }
 
 const userPassword = async () => {
-	let response = await prompt(
+	let response = await prompts(
 		[
 			{
-				"type": "input",
-				"name": "user",
-				"message": "User:"
+				type: "text",
+				name: "user",
+				message: "User:"
 			},
 			{
-				"type": "password",
-				"name": "password",
-				"message": "Password:",
-				"mask": true
+				type: "password",
+				name: "password",
+				message: "Password:"
 			}
-		]
-	).then(res => {
-		return res
-	}).catch(err => {
-		throw err
-	})
+		], { onCancel }
+	)
 	return response
+}
+
+const rememberPassword = async () => {
+	let response = await prompts({
+		type: "confirm",
+		name: "confirmation",
+		message: "Remember password?"
+	})
+	return response.confirmation
 }
 
 // register related
 
 const registerNamePassword = async () => {
-	let response = await prompt(
+	let response = await prompts(
 		[
 			{
-				"type": "input",
-				"name": "name",
-				"message": "What's your name?",
-				"validate": NameValidation
+				type: "text",
+				name: "name",
+				message: "What's your name?",
+				validate: name => name.match(NameValidationPattern) ? true : nameInvalidErr
 			},
 			{
-				"type": "password",
-				"name": "password",
-				"message": "Enter your password:",
-				"mask": true,
-				"validate": PasswordValidation
+				type: "password",
+				name: "password",
+				message: "Enter your password:",
+				validate: password => password.match(PasswordValidationPattern) ? true : passwordInvalidErr 
 			}
-		]
-	).then(res => {
-		return res
-	}).catch(err => {
-		throw err
-	})
+		], { onCancel }
+	)
 	return response
 }
 
 const confirmPassword = async () => {
-	let response = await prompt(
-		[
-			{
-				"type": "password",
-				"name": "password",
-				"message": "Confirm password",
-				"mask": true
-			}
-		]
-	).then(res => {
-		res = res.password
-		return res
-	}).catch(err => {
-		throw err
-	})
-	return response
+	let response = await prompts({
+		type: "password",
+		name: "password",
+		message: "Confirm password",
+	}, { onCancel })
+	return response.password
 }
 
 const someDetails = async () => {
-	let response = await prompt(
+	let response = await prompts(
 		[
 			{
-				"type": "list",
-				"name": "birthmonth",
-				"message": "Birth month",
-				"choices": [
-					"January", "February", "March", "April", "May", "June", 
-					"July", "August", "September", "October", "November", "December"
-				],
-				"loop": false
+				type: "list",
+				name: "birthmonth",
+				message: "Birth month",
+				choices: [
+					{ title: "January", value: "January" }, 
+					{ title: "February", value: "February" }, 
+					{ title: "March", value: "March" }, 
+					{ title: "April", value: "April" }, 
+					{ title: "May", value: "May" }, 
+					{ title: "June", value: "June" }, 
+					{ title: "July", value: "July" }, 
+					{ title: "August", value: "August" }, 
+					{ title: "September", value: "September" }, 
+					{ title: "October", value: "October" }, 
+					{ title: "November", value: "November" }, 
+					{ title: "December", value: "December" }
+				]
 			},
 			{
-				"type": "string",
-				"name": "birthdate",
-				"message": "Birth date (1-31)",
-				"validate": BirthDateValidation
+				type: "text",
+				name: "birthdate",
+				message: "Birth date (1-31)",
+				validate: birthdate => birthdate.match(BirthDateValidationPattern) ? true : birthdateInvalidErr
 			},
 			{
-				"type": "number",
-				"name": "birthyear",
-				"message": "Birth Year"
+				type: "number",
+				name: "birthyear",
+				message: "Birth Year"
 			},
 			{
-				"type": "list",
-				"name": "gender",
-				"message": "Gender",
-				"choices": ["Male","Female"]
+				type: "list",
+				name: "gender",
+				message: "Gender",
+				choices: [
+					{ title: "Male", value: "Male" },
+					{ title: "Female", value: "Female" }
+				]
 			}
-		]
-	).then(res => {
-		return res
-	}).catch(err => {
-		throw err
-	})
+		], { onCancel }
+	)
 	return response
 }
 
 // updating 
 const newName = async () => {
-	let newname = await prompt([{
-		"type": "input",
-		"name": "newname",
-		"message": "New name:",
-		"validate": NameValidation	
-	}])
+	let newname = await prompts({
+		type: "text",
+		name: "newname",
+		message: "New name:",
+		validate: n => n.match(NameValidationPattern) ? true : nameInvalidErr
+	}, { onCancel })
 	return newname.newname
 }
 const newPassword = async () => {
-	let newpassword = await prompt([{
-		"type": "password",
-		"name": "newpw",
-		"message": "New password:",
-		"validate": PasswordValidation,
-		"mask": true
-	}]).then(res => {
-		return res.newpw
-	})
-	let confirmPassword = await prompt([{
-		"type": "password",
-		"name": "newpw",
-		"message": "Confirm password:",
-		"mask": true
-	}])
+	let newpassword = await prompts({
+		type: "password",
+		name: "newpw",
+		message: "New password:",
+		validate: pw => pw.match(PasswordValidationPattern) ? true : passwordInvalidErr
+	}, { onCancel })
+	let confirmPassword = await prompts({
+		type: "password",
+		name: "newpw",
+		message: "Confirm password:",
+	}, { onCancel })
 	if (newpassword != confirmPassword){
 		console.log("Passwords doesn't match.")
 		return false
@@ -171,33 +164,42 @@ const newPassword = async () => {
 	}
 }
 const newBirthMonth = async () => {
-	let newbirthmonth = await prompt([{
-		"type": "list",
-		"name": "birthmonth",
-		"message": "Choose new birth month",
-		"choices": [
-			"January", "February", "March", "April", "May", "June", 
-			"July", "August", "September", "October", "November", "December"
-		],
-		"loop": false
-	}])
+	let newbirthmonth = await prompts({
+		type: "select",
+		name: "birthmonth",
+		message: "Choose new birth month",
+		choices: [
+			{ title: "January", value: "January" }, 
+			{ title: "February", value: "February" }, 
+			{ title: "March", value: "March" }, 
+			{ title: "April", value: "April" }, 
+			{ title: "May", value: "May" }, 
+			{ title: "June", value: "June" }, 
+			{ title: "July", value: "July" }, 
+			{ title: "August", value: "August" }, 
+			{ title: "September", value: "September" }, 
+			{ title: "October", value: "October" }, 
+			{ title: "November", value: "November" }, 
+			{ title: "December", value: "December" }
+		]
+	}, { onCancel })
 	return newbirthmonth.birthmonth
 }
 const newBirthDate = async () => {
-	let newbirthdate = await prompt([{
-		"type": "string",
-		"name": "birthdate",
-		"message": "Birth date (1-31)",
-		"validate": BirthDateValidation
-	}])
+	let newbirthdate = await prompts({
+		type: "text",
+		name: "birthdate",
+		message: "Birth date (1-31)",
+		validate: bdate => bdate.match(BirthDateValidationPattern) ? true : birthdateInvalidErr
+	}, { onCancel })
 	return newbirthdate.birthdate
 }
 const newBirthYear = async () => {
-	let newbirthyear = await prompt([{
-		"type": "number",
-		"name": "birthyear",
-		"message": "Enter new birth year:"
-	}])
+	let newbirthyear = await prompts({
+		type: "number",
+		name: "birthyear",
+		message: "Enter new birth year:"
+	}, { onCancel })
 	return newbirthyear.birthyear
 }
 
@@ -211,29 +213,41 @@ interface Details {
 }
 
 const whatToEdit = async (details: Details) => {
-	let whattoedit =  await prompt([{
-		"type": "list",
-		"name": "edit",
-		"message": "Edit profile | What to edit?",
-		"choices": [
-			`Name (currently ${details.name})`,
-			"Password",
-			`Birth date (currently ${details.bdate})`,
-			`Birth month (currently ${details.bmonth})`,
-			`Birth year (currently ${details.byear})`
+	let whattoedit =  await prompts({
+		type: "select",
+		name: "edit",
+		message: "Edit profile | What to edit?",
+		choices: [
+			{ 
+				title: `Name (currently ${details.name})`, 
+				value: "Name" 
+			},
+			{
+				title: "Password",
+				value: "Password"
+			},
+			{
+				title: `Birth date (currently ${details.bdate})`,
+				value: "Birth date"
+			},
+			{
+				title: `Birth month (currently ${details.bmonth})`,
+				value: "Birth month"
+			},
+			{
+				title: `Birth year (currently ${details.byear})`,
+				value: "Birth year"
+			}
 		]
-	}])
+	}, { onCancel })
 	return whattoedit.edit
 }
-
-// const main = async () => {
-// }
-// main()
 
 // exporting
 export { 
 	userOrGuest,
 	userPassword,
+	rememberPassword,
 	registerNamePassword,
 	confirmPassword,
 	someDetails,
@@ -242,6 +256,6 @@ export {
 	newBirthMonth,
 	newBirthDate,
 	newBirthYear,
-	whatToEdit
+	whatToEdit,
+	Details
 }
-export default Details

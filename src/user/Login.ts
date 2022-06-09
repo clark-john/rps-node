@@ -1,14 +1,15 @@
-import { red, yellow } from 'colorette'
+import { red } from 'colorette'
 import { PrismaClient } from '@prisma/client'
 import { Logout } from './Logout'
 import { pushLogin, getLogin } from './sendLoginToJSON'
+import { userLogin } from './userLogin'
 import sha1 from 'sha1' 
 import { 
 	userOrGuest, 
-	userPassword, 
 	registerNamePassword,
 	confirmPassword,
-	someDetails
+	someDetails,
+	rememberPassword
 } from './prompts'
 
 const prisma = new PrismaClient()
@@ -20,43 +21,14 @@ const loginOrGuest = async () => {
 		if (res == 'Guest') {
 			return "Guest"
 		}
-		else if (res.slice(0,4) == 'User') {
-			let userAndPassword: any
+		else if (res == 'User') {
 			let fetchUsers = await prisma.user.findMany()
 			if (fetchUsers.length == 0) {
 				console.log("No users")
 			} 
 			else {
-				const usersArray = await prisma.user.findMany()
-				userAndPassword = await userPassword()
-				
-				const usersList = []
-				for (let x = 0; x < usersArray.length; x++){
-					usersList.push(usersArray[x].name as never) 
-				}
-
-				const findme = usersList.includes(userAndPassword.user as never)
-
-				if ( !findme ){
-					console.log(`${yellow(userAndPassword.user)} doesn't exist.`)
-					process.exit(0)
-				} else {
-					let pw = await prisma.user.findFirst({
-						where: {
-							name: userAndPassword.user
-						}
-					})
-					if (pw) {
-						if (sha1(userAndPassword.password) == pw.password) {
-							pushLogin(userAndPassword.user)
-						} else {
-							console.log(red("Incorrect password"))
-							process.exit()
-						}
-					}
-				}
+				return await userLogin()
 			}
-			return userAndPassword.user
 		} else if (res == "Logout") {
 			console.log("Currently no logged in users.")
 			process.exit(0)
@@ -86,7 +58,8 @@ const loginOrGuest = async () => {
 					highscore: 0
 				}
 			})
-			pushLogin(nameAndPass.name)
+			let rememberPass = await rememberPassword()
+			pushLogin(nameAndPass.name, rememberPass)
 			return nameAndPass.name
 		}
 	} else {
@@ -98,13 +71,19 @@ const loginOrGuest = async () => {
 		} else if (res == 'Exit') {
 			process.exit(0)
 		}	else {
-			return await getLogin()
+			let user = await getLogin()
+			if (!user.rememberPassword) {
+				return await userLogin()
+			} else {
+				return user.name
+			}
 		}
 	}
 }
 
 const whoAmI = async () => {
-	return await getLogin()
+	let user = await getLogin()
+	return user.name
 }
 
 export { loginOrGuest, whoAmI }
