@@ -1,6 +1,5 @@
 import { PrismaClient, User } from "@prisma/client"
 import {
-  Details,
   newName,
   newPassword,
   newBirthDate,
@@ -8,6 +7,7 @@ import {
   newBirthYear,
   whatToEdit
 } from './prompts'
+import { Details } from '../utils/interfaces'
 import sha1 from 'sha1'
 
 const prisma = new PrismaClient()

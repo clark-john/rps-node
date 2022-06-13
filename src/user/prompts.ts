@@ -1,5 +1,6 @@
 import { getLogin } from './sendLoginToJSON'
 import { onCancel } from '../utils/onCancel'
+import { Details } from '../utils/interfaces'
 import prompts from 'prompts'
 
 const NameValidationPattern =  /^[\w]{3,}$/
@@ -204,13 +205,6 @@ const newBirthYear = async () => {
 }
 
 // what to edit and its interface
-interface Details {
-	name: string,
-	password: string,
-	bdate: number,
-	bmonth: string, 
-	byear: number
-}
 
 const whatToEdit = async (details: Details) => {
 	let whattoedit =  await prompts({
@@ -257,5 +251,4 @@ export {
 	newBirthDate,
 	newBirthYear,
 	whatToEdit,
-	Details
 }

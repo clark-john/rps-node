@@ -1,17 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 import { autoIncrement } from '../utils/autoIncrement'
 import { isHighScore } from '../utils/isHighScore'
+import { historyQuery } from '../utils/interfaces'
 
 const prisma = new PrismaClient()
-
-interface historyQuery {
-  user_score: number,
-  comp_score: number,
-  tie: number,
-  total_games: number,
-  datePlayed: string,
-  userLoggedIn: string
-}
 
 const storeHist = async (query: historyQuery) => {
   if (query.userLoggedIn != "Guest") {
@@ -31,4 +23,4 @@ const storeHist = async (query: historyQuery) => {
   })
 }
 
-export { storeHist, historyQuery }
+export { storeHist }

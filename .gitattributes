@@ -2,5 +2,6 @@
 
 prisma/schema.prisma linguist-detectable=true linguist-language=Prisma
 .env linguist-detectable=false
+
 # config files
 jest.config.ts linguist-generated

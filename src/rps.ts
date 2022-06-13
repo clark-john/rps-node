@@ -1,6 +1,7 @@
 import { log } from 'console'
 import { red, yellow, bold, green } from 'colorette'
-import { historyQuery, storeHist } from './hist/storeHistory'
+import { storeHist } from './hist/storeHistory'
+import { historyQuery } from './utils/interfaces'
 import prompts from 'prompts'
 import random from 'random'
 import casual from 'casual'
