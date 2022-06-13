@@ -25,6 +25,7 @@
     "cross-env": "^7.0.3",
     "file-exists": "^5.0.1",
     "hidefile": "^3.0.0",
+    "is-empty": "^1.2.0",
     "is-windows": "^1.0.2",
     "moment": "^2.29.3",
     "prisma": "^3.14.0",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@types/file-exists": "^5.0.0",
     "@types/hidefile": "^3.0.0",
+    "@types/is-empty": "^1.2.1",
     "@types/is-windows": "^1.0.0",
     "@types/node": "^17.0.40",
     "@types/prompts": "^2.0.14",

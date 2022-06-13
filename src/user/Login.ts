@@ -4,6 +4,7 @@ import { Logout } from './Logout'
 import { pushLogin, getLogin } from './sendLoginToJSON'
 import { userLogin } from './userLogin'
 import sha1 from 'sha1' 
+import empty from 'is-empty'
 import { 
 	userOrGuest, 
 	registerNamePassword,
@@ -17,7 +18,7 @@ const prisma = new PrismaClient()
 const loginOrGuest = async () => {
 	let res = await userOrGuest()
 
-	if (await getLogin() == null) {
+	if (empty(await getLogin())) {
 		if (res == 'Guest') {
 			return "Guest"
 		}

@@ -2,6 +2,7 @@ import { getLogin } from './sendLoginToJSON'
 import { onCancel } from '../utils/onCancel'
 import { Details } from '../utils/interfaces'
 import prompts from 'prompts'
+import empty from 'is-empty'
 
 const NameValidationPattern =  /^[\w]{3,}$/
 const PasswordValidationPattern = /^[\w]{8,}$/
@@ -13,7 +14,7 @@ const birthdateInvalidErr = "Birth date must be from 1 to 31."
 
 // Login related things
 const userOrGuest = async () => {
-	let user = await getLogin() == null ? '' : await getLogin()
+	let user = empty(await getLogin()) ? '' : await getLogin()
 	let response = await prompts({
 		type: "select",
 		name: "login",

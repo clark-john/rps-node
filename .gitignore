@@ -14,4 +14,7 @@ npm-error.log
 src/user/.login.json
 src/hist/history.json
 
+# lockfile
+package-lock.json
+
 *.bat
