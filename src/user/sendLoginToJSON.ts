@@ -1,9 +1,10 @@
 import { writeFile, readFile } from 'fs/promises'
+import { resolve } from 'path'
 import { hide } from "hidefile";
 import fileExists from "file-exists";
 
-const jsonpath = './src/user/login.json'
-const jsonpath_hidden = './src/user/.login.json'
+const jsonpath = resolve(__dirname, './login.json')
+const jsonpath_hidden = resolve(__dirname, './.login.json')
 
 const pushLogin = async (userLoggedIn: string, rememberPass: boolean) => {
 	const json = {

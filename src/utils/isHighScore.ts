@@ -26,7 +26,10 @@ const isHighScore = async (user_score: number, userLoggedIn: string) => {
           highscore: user_score
         }
       })
-    } 
+      return true
+    } else {
+      return false
+    }
   } 
 }
 

@@ -4,7 +4,8 @@ export interface historyQuery {
   tie: number,
   total_games: number,
   datePlayed: string,
-  userLoggedIn: string
+  userLoggedIn: string,
+  isHighScore: boolean
 }
 
 export interface Details {

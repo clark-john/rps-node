@@ -1,8 +1,9 @@
 import { rm } from 'fs/promises'
+import { resolve } from 'path'
 import { bold, green } from 'colorette'
 
 const Logout = async () => {
-	await rm('./src/user/.login.json', { force: true })
+	await rm(resolve(__dirname, "./.login.json"), { force: true })
 	.then(() => {
 		console.log(bold(green("Logged out successfully")))
 	})

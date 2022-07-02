@@ -17,16 +17,32 @@ model History {
   total_games Int
   dateplayed String @db.VarChar(30) @unique
   playedBy String @db.VarChar(200)
+  isHighScore Boolean
 }
 
 model User {
   name String @db.VarChar(200) @unique
   password String @db.VarChar(200)
   birthdate Int @db.SmallInt()
-  birthmonth String @db.VarChar(10)
+  birthmonth BirthMonth
   birthyear Int
   gender Gender 
   highscore Int
+}
+
+enum BirthMonth {
+  January
+  February
+  March
+  April
+  May
+  June
+  July
+  August
+  September
+  October
+  November
+  December
 }
 
 enum Gender {

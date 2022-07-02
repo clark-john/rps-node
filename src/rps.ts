@@ -101,13 +101,16 @@ const play = async (userLoggedIn: string) => {
         log("Tie:",tie)
         log("Number of games:",total_games)
 
+        const isHighScore = (userLoggedIn == "Guest") ? false : true
+
         const query: historyQuery = {
           user_score,
           comp_score,
           tie,
           total_games,
           datePlayed,
-          userLoggedIn
+          userLoggedIn,
+          isHighScore
         } 
         await storeHist(query)
         process.exit()

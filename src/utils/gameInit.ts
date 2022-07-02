@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { clearHist } from '../hist/History'
+import { clearHist } from '@hist/History'
 import { getConfigData } from './getConfigData'
 
 const prisma = new PrismaClient()

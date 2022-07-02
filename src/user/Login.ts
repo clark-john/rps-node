@@ -26,6 +26,7 @@ const loginOrGuest = async () => {
 			let fetchUsers = await prisma.user.findMany()
 			if (fetchUsers.length == 0) {
 				console.log("No users")
+				process.exit()
 			} 
 			else {
 				return await userLogin()
@@ -36,32 +37,7 @@ const loginOrGuest = async () => {
 		} else if (res == "Exit") {
 			process.exit(0)
 		} else {
-			let nameAndPass: any
-			while (true) {
-				nameAndPass = await registerNamePassword()
-				let confirmPass = await confirmPassword()
-				if (nameAndPass.password != confirmPass) {
-					console.log(red("Passwords doesn't match."))
-				} else {
-					nameAndPass.password = sha1(nameAndPass.password)
-					break
-				}
-			}
-			let details = await someDetails()
-			await prisma.user.create({
-				data: {
-					name: nameAndPass.name,
-					password: nameAndPass.password,
-					birthdate: Number(details.birthdate),
-					birthmonth: details.birthmonth,
-					birthyear: details.birthyear,
-					gender: details.gender,
-					highscore: 0
-				}
-			})
-			let rememberPass = await rememberPassword()
-			pushLogin(nameAndPass.name, rememberPass)
-			return nameAndPass.name
+			await register()
 		}
 	} else {
 		if (res == 'Guest') {
@@ -71,15 +47,46 @@ const loginOrGuest = async () => {
 			process.exit(0)
 		} else if (res == 'Exit') {
 			process.exit(0)
-		}	else {
+		} else if (res == 'User') {
 			let user = await getLogin()
 			if (!user.rememberPassword) {
 				return await userLogin()
 			} else {
 				return user.name
 			}
+		}	else {
+			await register()
 		}
 	}
+}
+
+async function register(){
+	let nameAndPass: any
+	while (true) {
+		nameAndPass = await registerNamePassword()
+		let confirmPass = await confirmPassword()
+		if (nameAndPass.password != confirmPass) {
+			console.log(red("Passwords doesn't match."))
+		} else {
+			nameAndPass.password = sha1(nameAndPass.password)
+			break
+		}
+	}
+	let details = await someDetails()
+	await prisma.user.create({
+		data: {
+			name: nameAndPass.name,
+			password: nameAndPass.password,
+			birthdate: Number(details.birthdate),
+			birthmonth: details.birthmonth,
+			birthyear: details.birthyear,
+			gender: details.gender,
+			highscore: 0
+		}
+	})
+	let rememberPass = await rememberPassword()
+	pushLogin(nameAndPass.name, rememberPass)
+	return nameAndPass.name
 }
 
 const whoAmI = async () => {

@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "BirthMonth" AS ENUM ('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+
+-- CreateEnum
 CREATE TYPE "Gender" AS ENUM ('Male', 'Female');
 
 -- CreateTable
@@ -9,7 +12,8 @@ CREATE TABLE "History" (
     "tie" INTEGER NOT NULL,
     "total_games" INTEGER NOT NULL,
     "dateplayed" VARCHAR(30) NOT NULL,
-    "playedBy" VARCHAR(200) NOT NULL
+    "playedBy" VARCHAR(200) NOT NULL,
+    "isHighScore" BOOLEAN NOT NULL
 );
 
 -- CreateTable
@@ -17,7 +21,7 @@ CREATE TABLE "User" (
     "name" VARCHAR(200) NOT NULL,
     "password" VARCHAR(200) NOT NULL,
     "birthdate" SMALLINT NOT NULL,
-    "birthmonth" VARCHAR(10) NOT NULL,
+    "birthmonth" "BirthMonth" NOT NULL,
     "birthyear" INTEGER NOT NULL,
     "gender" "Gender" NOT NULL,
     "highscore" INTEGER NOT NULL

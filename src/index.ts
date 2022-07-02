@@ -1,3 +1,4 @@
+import 'module-alias/register'
 import { yellow, magenta, green, bold, red } from 'colorette'
 import { play } from './rps'
 import { tui } from './tui'
@@ -22,6 +23,7 @@ const config = getConfigData()
 
 process.title = config.game.window_title;
 
+// where prisma is used
 (async () => {
 	let userLoggedIn = await loginOrGuest()
 	if (userLoggedIn == 'Guest') {
@@ -63,5 +65,3 @@ process.title = config.game.window_title;
 		}
 	}
 })()
-
-// we are migrating from inquirer to prompts :D

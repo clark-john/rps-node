@@ -13,7 +13,6 @@ const commands = readFileSync('./src/commands.json', 'utf8')
 const commands_list = JSON.parse(commands)
 
 const tui = async (userLoggedIn: string) => {
-	// tui
 	while (true) {
 		let ans = await prompts({
 			type: "text",
@@ -50,7 +49,7 @@ const tui = async (userLoggedIn: string) => {
 			await editProfile(userLoggedIn)
 		}
 		else if (cmd == 'whoami'){
-			if (userLoggedIn != 'Guest') {console.log(await whoAmI())}
+			if (userLoggedIn != 'Guest') { console.log(await whoAmI()) }
 		}
 		else if (cmd == 'logout'){
 			await Logout()
