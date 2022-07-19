@@ -55,7 +55,7 @@ const loginOrGuest = async () => {
 				return user.name
 			}
 		}	else {
-			await register()
+			return await register()
 		}
 	}
 }

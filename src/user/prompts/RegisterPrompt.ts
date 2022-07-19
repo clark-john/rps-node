@@ -1,10 +1,19 @@
 import prompts from 'prompts'
+import moment from 'moment'
 import { onCancel } from '@utils/onCancel'
-import { nameSchema, passwordSchema, birthDateSchema } from '@utils/joiSchemas'
+import { 
+	nameSchema, 
+	passwordSchema, 
+	birthDateSchema,
+	birthYearSchema
+} from '@utils/joiSchemas'
+
+const maximumYear = Number(moment(Date.now()).format('Y'))
 
 const nameInvalidErr = "Name must have equal or more than 3 characters."
 const passwordInvalidErr = "Password must have equal or more than 8 characters."
-const birthdateInvalidErr = "Birth date must be from 1 to 31."
+const birthDateInvalidErr = "Birth date must be from 1 to 31."
+const birthYearInvalidErr = `Birth year must be from 1950 to ${maximumYear}.`
 
 const registerNamePassword = async () => {
 	let response = await prompts(
@@ -13,13 +22,15 @@ const registerNamePassword = async () => {
 				type: "text",
 				name: "name",
 				message: "What's your name?",
-				validate: name => !nameSchema.validate(name)['error'] ? true : nameInvalidErr
+				validate: name => 
+					!nameSchema.validate(name)['error'] ? true : nameInvalidErr
 			},
 			{
 				type: "password",
 				name: "password",
 				message: "Enter your password:",
-				validate: password => !passwordSchema.validate(password)['error'] ? true : passwordInvalidErr 
+				validate: password => 
+					!passwordSchema.validate(password)['error'] ? true : passwordInvalidErr 
 			}
 		], { onCancel }
 	)
@@ -61,12 +72,15 @@ const someDetails = async () => {
 				type: "text",
 				name: "birthdate",
 				message: "Birth date (1-31)",
-				validate: birthdate => !birthDateSchema.validate(birthdate)['error'] ? true : birthdateInvalidErr
+				validate: birthdate => 
+					!birthDateSchema.validate(birthdate)['error'] ? true : birthDateInvalidErr
 			},
 			{
 				type: "number",
 				name: "birthyear",
-				message: "Birth Year"
+				message: "Birth Year",
+				validate: birthyear => 
+					!birthYearSchema.validate(birthyear)['error'] ? true : birthYearInvalidErr
 			},
 			{
 				type: "select",
