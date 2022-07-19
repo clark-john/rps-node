@@ -2,7 +2,7 @@ import { red, yellow } from 'colorette'
 import { PrismaClient } from '@prisma/client'
 import { pushLogin } from './sendLoginToJSON'
 import { userPassword, rememberPassword } from './prompts'
-import sha1 from 'sha1' 
+import { shaEncode } from './Sha256'
 
 const prisma = new PrismaClient()
 
@@ -28,7 +28,7 @@ const userLogin = async () => {
 			}
 		})
 		if (pw) {
-			if (sha1(userAndPassword.password) == pw.password) {
+			if (shaEncode(userAndPassword.password) == pw.password) {
 				let rememberPass = await rememberPassword()
 				pushLogin(userAndPassword.user, rememberPass)
 			} else {

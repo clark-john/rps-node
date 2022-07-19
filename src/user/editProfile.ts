@@ -8,7 +8,8 @@ import {
   whatToEdit
 } from './prompts'
 import { Details } from '@utils/interfaces'
-import sha1 from 'sha1'
+import { shaEncode } from './Sha256'
+// import sha1 from 'sha1'
 
 const prisma = new PrismaClient()
 
@@ -83,7 +84,7 @@ const editProfile = async (userLoggedIn: string) => {
         console.log("Birth year updated successfully.")
       })
     } else {
-      let newpassword = sha1(await newPassword())
+      let newpassword = shaEncode(await newPassword())
       await prisma.user.update({
         where: {
           name: userLoggedIn

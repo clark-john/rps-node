@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { Logout } from './Logout'
 import { pushLogin, getLogin } from './sendLoginToJSON'
 import { userLogin } from './userLogin'
-import sha1 from 'sha1' 
+import { shaEncode } from './Sha256'
 import empty from 'is-empty'
 import { 
 	userOrGuest, 
@@ -68,7 +68,7 @@ async function register(){
 		if (nameAndPass.password != confirmPass) {
 			console.log(red("Passwords doesn't match."))
 		} else {
-			nameAndPass.password = sha1(nameAndPass.password)
+			nameAndPass.password = shaEncode(nameAndPass.password)
 			break
 		}
 	}
