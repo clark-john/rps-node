@@ -1,10 +1,10 @@
-import { getLogin } from '@user/sendLoginToJSON'
-import { onCancel } from '@utils/onCancel'
-import prompts from 'prompts'
-import empty from 'is-empty'
+import { getLogin } from '@user/sendLoginToJSON';
+import { onCancel } from '@utils/onCancel';
+import prompts from 'prompts';
+import empty from 'is-empty';
 
 const userOrGuest = async () => {
-	let user = empty(await getLogin()) ? '' : await getLogin()
+	let user = empty(await getLogin()) ? '' : await getLogin();
 	let response = await prompts({
 		type: "select",
 		name: "login",
@@ -16,9 +16,9 @@ const userOrGuest = async () => {
 			{ title: "Logout", value: "Logout" },
 			{ title: "Exit", value: "Exit" }
 		]
-	})
-	return response.login
-}
+	});
+	return response.login;
+};
 
 const userPassword = async () => {
 	let response = await prompts(
@@ -34,21 +34,21 @@ const userPassword = async () => {
 				message: "Password:"
 			}
 		], { onCancel }
-	)
-	return response
-}
+	);
+	return response;
+};
 
 const rememberPassword = async () => {
 	let response = await prompts({
 		type: "confirm",
 		name: "confirmation",
 		message: "Remember password?"
-	})
-	return response.confirmation
-}
+	});
+	return response.confirmation;
+};
 
 export { 
 	userOrGuest,
 	userPassword,
 	rememberPassword,
-}
+};

@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client"
+import { PrismaClient } from "@prisma/client";
 import {
   newName,
   newPassword,
@@ -6,12 +6,12 @@ import {
   newBirthMonth,
   newBirthYear,
   whatToEdit
-} from './prompts'
-import { Details } from '@utils/interfaces'
-import { shaEncode } from './Sha256'
+} from './prompts';
+import { Details } from '@utils/interfaces';
+import { shaEncode } from './Sha256';
 // import sha1 from 'sha1'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 // fetch user info
 const fetchInfo = async (userLoggedIn: string) => {
@@ -19,12 +19,12 @@ const fetchInfo = async (userLoggedIn: string) => {
     where: {
       name: userLoggedIn
     }
-  })
-  return info
-}
+  });
+  return info;
+};
 
 const editProfile = async (userLoggedIn: string) => {
-  let info = await fetchInfo(userLoggedIn)
+  let info = await fetchInfo(userLoggedIn);
   if (info) {
     let details: Details = {
       name: info.name,
@@ -32,11 +32,11 @@ const editProfile = async (userLoggedIn: string) => {
       bdate: info.birthdate,
       bmonth: info.birthmonth,
       byear: info.birthyear
-    }
-    let whattoedit = await whatToEdit(details)
+    };
+    let whattoedit = await whatToEdit(details);
 
     if (whattoedit == "Name") {
-      let newname = await newName()
+      let newname = await newName();
       await prisma.user.update({
         where: {
           name: userLoggedIn
@@ -45,10 +45,10 @@ const editProfile = async (userLoggedIn: string) => {
           name: newname
         }
       }).then(() => {
-        console.log("Name updated successfully.")
-      })
+        console.log("Name updated successfully.");
+      });
     } else if (whattoedit == "Birth date") {
-      let newbirthdate = await newBirthDate()
+      let newbirthdate = await newBirthDate();
       await prisma.user.update({
         where: {
           name: userLoggedIn
@@ -57,10 +57,10 @@ const editProfile = async (userLoggedIn: string) => {
           birthdate: Number(newbirthdate)
         }
       }).then(() => {
-        console.log("Birth date updated successfully.")
-      })
+        console.log("Birth date updated successfully.");
+      });
     } else if (whattoedit == "Birth month") {
-      let newbirthmonth = await newBirthMonth()
+      let newbirthmonth = await newBirthMonth();
       await prisma.user.update({
         where: {
           name: userLoggedIn
@@ -69,10 +69,10 @@ const editProfile = async (userLoggedIn: string) => {
           birthmonth: newbirthmonth
         }
       }).then(() => {
-        console.log("Birth month updated successfully.")
-      })
+        console.log("Birth month updated successfully.");
+      });
     } else if (whattoedit == "Birth year") {
-      let newbirthyear = await newBirthYear()
+      let newbirthyear = await newBirthYear();
       await prisma.user.update({
         where: {
           name: userLoggedIn
@@ -81,10 +81,10 @@ const editProfile = async (userLoggedIn: string) => {
           birthyear: newbirthyear
         }
       }).then(() => {
-        console.log("Birth year updated successfully.")
-      })
+        console.log("Birth year updated successfully.");
+      });
     } else {
-      let newpassword = shaEncode(await newPassword())
+      let newpassword = shaEncode(await newPassword());
       await prisma.user.update({
         where: {
           name: userLoggedIn
@@ -93,10 +93,10 @@ const editProfile = async (userLoggedIn: string) => {
           password: newpassword
         }
       }).then(() => {
-        console.log("Password updated successfully.")
-      })
+        console.log("Password updated successfully.");
+      });
     }
   }
-}
+};
 
-export { editProfile }
+export { editProfile };

@@ -1,19 +1,19 @@
-import prompts from 'prompts'
-import moment from 'moment'
-import { onCancel } from '@utils/onCancel'
+import prompts from 'prompts';
+import moment from 'moment';
+import { onCancel } from '@utils/onCancel';
 import { 
 	nameSchema, 
 	passwordSchema, 
 	birthDateSchema,
 	birthYearSchema
-} from '@utils/joiSchemas'
+} from '@utils/joiSchemas';
 
-const maximumYear = Number(moment(Date.now()).format('Y'))
+const maximumYear = Number(moment(Date.now()).format('Y'));
 
-const nameInvalidErr = "Name must have equal or more than 3 characters."
-const passwordInvalidErr = "Password must have equal or more than 8 characters."
-const birthDateInvalidErr = "Birth date must be from 1 to 31."
-const birthYearInvalidErr = `Birth year must be from 1950 to ${maximumYear}.`
+const nameInvalidErr = "Name must have equal or more than 3 characters.";
+const passwordInvalidErr = "Password must have equal or more than 8 characters.";
+const birthDateInvalidErr = "Birth date must be from 1 to 31.";
+const birthYearInvalidErr = `Birth year must be from 1950 to ${maximumYear}.`;
 
 const registerNamePassword = async () => {
 	let response = await prompts(
@@ -33,18 +33,18 @@ const registerNamePassword = async () => {
 					!passwordSchema.validate(password)['error'] ? true : passwordInvalidErr 
 			}
 		], { onCancel }
-	)
-	return response
-}
+	);
+	return response;
+};
 
 const confirmPassword = async () => {
 	let response = await prompts({
 		type: "password",
 		name: "password",
 		message: "Confirm password",
-	}, { onCancel })
-	return response.password
-}
+	}, { onCancel });
+	return response.password;
+};
 
 const someDetails = async () => {
 	let response = await prompts(
@@ -92,8 +92,8 @@ const someDetails = async () => {
 				]
 			}
 		], { onCancel }
-	)
-	return response
-}
+	);
+	return response;
+};
 
-export { registerNamePassword, confirmPassword, someDetails }
+export { registerNamePassword, confirmPassword, someDetails };

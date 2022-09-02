@@ -1,97 +1,99 @@
-import { red } from 'colorette'
-import { PrismaClient } from '@prisma/client'
-import { Logout } from './Logout'
-import { pushLogin, getLogin } from './sendLoginToJSON'
-import { userLogin } from './userLogin'
-import { shaEncode } from './Sha256'
-import empty from 'is-empty'
+import { red } from 'colorette';
+import { PrismaClient } from '@prisma/client';
+import { Logout } from './Logout';
+import { pushLogin, getLogin } from './sendLoginToJSON';
+import { userLogin } from './userLogin';
+import { shaEncode } from './Sha256';
+import empty from 'is-empty';
 import { 
 	userOrGuest, 
 	registerNamePassword,
 	confirmPassword,
 	someDetails,
 	rememberPassword
-} from './prompts'
+} from './prompts';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const loginOrGuest = async () => {
-	let res = await userOrGuest()
+	let res = await userOrGuest();
 
 	if (empty(await getLogin())) {
 		if (res == 'Guest') {
-			return "Guest"
+			return "Guest";
 		}
 		else if (res == 'User') {
-			let fetchUsers = await prisma.user.findMany()
+			let fetchUsers = await prisma.user.findMany();
 			if (fetchUsers.length == 0) {
-				console.log("No users")
-				process.exit()
+				console.log("No users");
+				process.exit();
 			} 
 			else {
-				return await userLogin()
+				return await userLogin();
 			}
 		} else if (res == "Logout") {
-			console.log("Currently no logged in users.")
-			process.exit(0)
+			console.log("Currently no logged in users.");
+			process.exit(0);
 		} else if (res == "Exit") {
-			process.exit(0)
+			process.exit(0);
 		} else {
-			await register()
+			await register();
 		}
 	} else {
 		if (res == 'Guest') {
-			return res
+			return res;
 		} else if (res == 'Logout') {
-			await Logout()
-			process.exit(0)
+			await Logout();
+			process.exit(0);
 		} else if (res == 'Exit') {
-			process.exit(0)
+			process.exit(0);
 		} else if (res == 'User') {
-			let user = await getLogin()
+			let user = await getLogin();
 			if (!user.rememberPassword) {
-				return await userLogin()
+				return await userLogin();
 			} else {
-				return user.name
+				return user.name;
 			}
 		}	else {
-			return await register()
+			return await register();
 		}
 	}
-}
+};
 
 async function register(){
-	let nameAndPass: any
+	let nameAndPass: any;
 	while (true) {
-		nameAndPass = await registerNamePassword()
-		let confirmPass = await confirmPassword()
+		nameAndPass = await registerNamePassword();
+		let confirmPass = await confirmPassword();
 		if (nameAndPass.password != confirmPass) {
-			console.log(red("Passwords doesn't match."))
+			console.log(red("Passwords doesn't match."));
 		} else {
-			nameAndPass.password = shaEncode(nameAndPass.password)
-			break
+			nameAndPass.password = shaEncode(nameAndPass.password);
+			break;
 		}
 	}
-	let details = await someDetails()
+	let details = await someDetails();
+	const { name, password } = nameAndPass;
+	const { birthdate, birthmonth, birthyear, gender } = details;
 	await prisma.user.create({
 		data: {
-			name: nameAndPass.name,
-			password: nameAndPass.password,
-			birthdate: Number(details.birthdate),
-			birthmonth: details.birthmonth,
-			birthyear: details.birthyear,
-			gender: details.gender,
+			name,
+			password,
+			birthdate: Number(birthdate),
+			birthmonth,
+			birthyear,
+			gender,
 			highscore: 0
 		}
-	})
-	let rememberPass = await rememberPassword()
-	pushLogin(nameAndPass.name, rememberPass)
-	return nameAndPass.name
+	});
+	let rememberPass = await rememberPassword();
+	pushLogin(nameAndPass.name, rememberPass);
+	return nameAndPass.name;
 }
 
 const whoAmI = async () => {
-	let user = await getLogin()
-	return user.name
-}
+	let user = await getLogin();
+	return user.name;
+};
 
-export { loginOrGuest, whoAmI }
+export { loginOrGuest, whoAmI };

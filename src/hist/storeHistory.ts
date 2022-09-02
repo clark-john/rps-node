@@ -1,29 +1,38 @@
-import { PrismaClient } from '@prisma/client'
-import { autoIncrement } from '@utils/autoIncrement'
-import { isHighScore } from '@utils/isHighScore'
-import { historyQuery } from '@utils/interfaces'
+import { PrismaClient } from '@prisma/client';
+import { autoIncrement } from '@utils/autoIncrement';
+import { isHighScore as isHighScoreReached } from '@utils/isHighScore';
+import { historyQuery } from '@utils/interfaces';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const storeHist = async (query: historyQuery) => {
-  if (query.userLoggedIn != "Guest") {
-    query.isHighScore = await isHighScore(query.user_score, query.userLoggedIn) as boolean
+  const { 
+    user_score, 
+    comp_score, 
+    tie, 
+    total_games, 
+    datePlayed,
+    userLoggedIn
+  } = query;
+  let isHighScore = query.isHighScore;
+  if (userLoggedIn != "Guest") {
+    isHighScore = await isHighScoreReached(user_score, userLoggedIn) as boolean;
   } else {
-    query.isHighScore = false
+    isHighScore = false;
   }
-  const gamenumber = await autoIncrement()
+  const gamenumber = await autoIncrement();
   await prisma.history.create({
     data: {
       gamenumber: gamenumber,
-      wins: query.user_score,
-      loses: query.comp_score,
-      tie: query.tie,
-      total_games: query.total_games,
-      dateplayed: query.datePlayed,
-      playedBy: query.userLoggedIn,
-      isHighScore: query.isHighScore
+      wins: user_score,
+      loses: comp_score,
+      tie,
+      total_games,
+      dateplayed: datePlayed,
+      playedBy: userLoggedIn,
+      isHighScore
     }
-  })
-}
+  });
+};
 
-export { storeHist }
+export { storeHist };

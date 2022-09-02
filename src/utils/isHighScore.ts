@@ -1,7 +1,7 @@
-import { PrismaClient, User } from "@prisma/client"
-import { green } from 'colorette'
+import { PrismaClient, User } from "@prisma/client";
+import { green } from 'colorette';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 // fetch user info
 const fetchInfo = async (userLoggedIn: string) => {
@@ -9,15 +9,15 @@ const fetchInfo = async (userLoggedIn: string) => {
     where: {
       name: userLoggedIn
     }
-  })
-  return info
-}
+  });
+  return info;
+};
 
 const isHighScore = async (user_score: number, userLoggedIn: string) => {
-  const info: User | null = await fetchInfo(userLoggedIn)
+  const info: User | null = await fetchInfo(userLoggedIn);
   if (info) {
     if (user_score > info.highscore) {
-      console.log(`New high score: ${green(user_score)}`)
+      console.log(`New high score: ${green(user_score)}`);
       await prisma.user.update({
         where: {
           name: info.name
@@ -25,12 +25,12 @@ const isHighScore = async (user_score: number, userLoggedIn: string) => {
         data: {
           highscore: user_score
         }
-      })
-      return true
+      });
+      return true;
     } else {
-      return false
+      return false;
     }
   } 
-}
+};
 
-export { isHighScore }
+export { isHighScore };

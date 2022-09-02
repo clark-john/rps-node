@@ -1,4 +1,4 @@
 export const onCancel = () => {
-  console.log("Aborted!")
-  process.exit()
-}
+  console.log("Aborted!");
+  process.exit();
+};
